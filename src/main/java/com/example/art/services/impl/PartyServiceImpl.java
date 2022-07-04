@@ -2,7 +2,7 @@ package com.example.art.services.impl;
 
 import com.example.art.dto.BaseResponse;
 import com.example.art.dto.request.AddPartyRequestDto;
-import com.example.art.modals.Party;
+import com.example.art.model.Party;
 import com.example.art.repository.PartyRepository;
 import com.example.art.services.PartyService;
 import org.springframework.beans.factory.annotation.Autowired;

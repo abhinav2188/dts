@@ -1,4 +1,4 @@
-package com.example.art.modals;
+package com.example.art.model;
 
 import javax.persistence.*;
 import java.util.Date;

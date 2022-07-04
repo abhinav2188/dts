@@ -1,4 +1,4 @@
-package com.example.art.modals;
+package com.example.art.model;
 
 import com.example.art.dto.request.AddPartyRequestDto;
 import lombok.Data;
