@@ -1,10 +1,10 @@
-package com.example.art.model;
+package com.example.art.model.abstracts;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @MappedSuperclass
-public class Timestamps {
+public abstract class Timestamps {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTimestamp;
