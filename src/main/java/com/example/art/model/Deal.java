@@ -18,23 +18,33 @@ public class Deal extends Timestamps {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // section 1
     private String name;
 
     @Temporal(TemporalType.DATE)
     private Date openingDate;
 
-    private String siteLocation;
+    @Temporal(TemporalType.DATE)
+    private Date expectedCloseDate;
 
-    private String productDetails;
+    @Temporal(TemporalType.DATE)
+    private Date actualCloseDate;
+
+    private Integer expectedNumberOfDays;
+
+    private String siteLocation;
 
     @Enumerated(EnumType.STRING)
     private DealStage dealStage;
 
+    private String productDetails;
+
+    private String roadDetails;
+
+    // section 2
     private String workType;
 
     private String subCategory;
-
-    private String roadDetails;
 
     private String cateredByVertical;
 
@@ -43,14 +53,6 @@ public class Deal extends Timestamps {
 
     @ManyToMany
     private List<User> coOwnerList;
-
-    private Integer expectedNumberOfDays;
-
-    @Temporal(TemporalType.DATE)
-    private Date expectedCloseDate;
-
-    @Temporal(TemporalType.DATE)
-    private Date actualCloseDate;
 
     private Double dealValueInCr;
 
@@ -66,7 +68,7 @@ public class Deal extends Timestamps {
 
     private String lastPurchaseDetails;
 
-    private String CompetitorsInfo;
+    private String competitorsInfo;
 
     private Integer ownerFocus;
 

@@ -16,14 +16,14 @@ public class Interaction{
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date interactionDate;
+    private Date meetingDate;
 
     @Enumerated(EnumType.STRING)
     private DealStage dealStage;
 
     private String meetingLocation;
 
-    private String description;
+    private String meetingDetails;
 
     @ManyToMany
     private List<Contact> meetingPersons;
