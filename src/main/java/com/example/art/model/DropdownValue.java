@@ -5,8 +5,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
 @Data
+@Entity(name="dropdowns")
 public class DropdownValue {
 
     @Id
@@ -15,7 +15,7 @@ public class DropdownValue {
 
     private String value;
 
-    private Integer order;
+    private Integer valueOrder;
 
     @Enumerated(EnumType.STRING)
     private DropdownType dropdownType;
