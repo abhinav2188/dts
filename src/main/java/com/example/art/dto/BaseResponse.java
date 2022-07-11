@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Builder
 @Data
-public class BaseResponse {
+public class BaseResponse<T> {
 
     private HttpStatus status;
 
@@ -14,6 +14,6 @@ public class BaseResponse {
 
     private String responseCode;
 
-    private Object data;
+    private T data;
 
 }
