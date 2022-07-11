@@ -10,6 +10,7 @@ import com.example.art.repository.DropdownRepository;
 import com.example.art.services.DropdownService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +88,24 @@ public class DropdownServiceImpl implements DropdownService {
                 .responseMsg("returned "+dropdownKeyDetailsMap.size()+" dropdown key, values")
                 .data(responseData)
                 .build();
+    }
+
+    @Override
+    public BaseResponse deleteDropdownValue(Long valueId) {
+        try{
+            dropdownRepository.deleteById(valueId);
+            return BaseResponse.builder()
+                    .status(HttpStatus.OK)
+                    .responseMsg("dropdown value deleted")
+                    .build();
+        }
+        catch (EmptyResultDataAccessException e){
+            log.error("error deleting dropdown value with id={}, error: {}",valueId,e.getMessage());
+            return BaseResponse.builder()
+                    .status(HttpStatus.OK)
+                    .responseMsg("error deleting dropdown value, value doesn't exists")
+                    .build();
+        }
     }
 
     private DropdownKeyValuesDetails getDropdownKeyValueDetails(DropdownType dropdownType) {

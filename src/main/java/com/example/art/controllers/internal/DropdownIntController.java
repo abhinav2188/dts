@@ -27,4 +27,9 @@ public class DropdownIntController {
     public BaseResponse getAllDropdownValues(){
         return dropdownService.getAllDropdownValues();
     }
+
+    @DeleteMapping("/value")
+    public BaseResponse deleteDropdownValue(@RequestParam(name = "valueId") Long valueId){
+        return dropdownService.deleteDropdownValue(valueId);
+    }
 }

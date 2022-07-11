@@ -12,4 +12,6 @@ public interface DropdownService {
     BaseResponse<DropdownKeysResponse> getAllDropdownKeys();
 
     BaseResponse<DropdownKeyValuesResponse> getAllDropdownValues();
+
+    BaseResponse deleteDropdownValue(Long valueId);
 }
