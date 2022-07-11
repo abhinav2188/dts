@@ -11,4 +11,6 @@ public interface DropdownRepository extends JpaRepository<DropdownValue,Long> {
 
     List<DropdownValueDetails> findAllByDropdownType(DropdownType dropdownType);
 
+    List<DropdownValue> findByDropdownTypeIn(List<DropdownType> dropdownTypes);
+
 }

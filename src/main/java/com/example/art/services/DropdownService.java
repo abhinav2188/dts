@@ -14,4 +14,7 @@ public interface DropdownService {
     BaseResponse<DropdownKeyValuesResponse> getAllDropdownValues();
 
     BaseResponse deleteDropdownValue(Long valueId);
+
+    BaseResponse<DropdownKeyValuesResponse> getDropdownValues(String dropdownType, String formType);
+
 }

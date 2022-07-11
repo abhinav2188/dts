@@ -1,5 +1,6 @@
 package com.example.art.dto.response;
 
+import com.example.art.model.DropdownValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,5 +13,11 @@ public class DropdownValueDetails {
     private String value;
 
     private Integer valueOrder;
+
+    public DropdownValueDetails(DropdownValue dropdownValue){
+        id = dropdownValue.getId();
+        value = dropdownValue.getValue();
+        valueOrder = dropdownValue.getValueOrder();
+    }
 
 }

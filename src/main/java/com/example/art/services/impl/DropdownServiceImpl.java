@@ -6,6 +6,7 @@ import com.example.art.dto.response.*;
 import com.example.art.helper.DropdownHelper;
 import com.example.art.model.DropdownValue;
 import com.example.art.model.enums.DropdownType;
+import com.example.art.model.enums.FormType;
 import com.example.art.repository.DropdownRepository;
 import com.example.art.services.DropdownService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -70,14 +72,7 @@ public class DropdownServiceImpl implements DropdownService {
 
         DropdownKeyValuesResponse responseData = new DropdownKeyValuesResponse();
 
-        Map<String, DropdownKeyValuesDetails> dropdownKeyDetailsMap = new HashMap<>();
-
-        for(DropdownType dropdownType : DropdownType.values()){
-            DropdownKeyValuesDetails dropdownKeyValuesDetails = getDropdownKeyValueDetails(dropdownType);
-            if(dropdownKeyValuesDetails != null){
-                dropdownKeyDetailsMap.put(dropdownType.name(), dropdownKeyValuesDetails);
-            }
-        }
+        Map<String, DropdownKeyValuesDetails> dropdownKeyDetailsMap = getKeyValuesDetailsMap(null);
 
         // todo : for static, dropdowns dealing with other entities like contact, user etc.
 
@@ -108,7 +103,93 @@ public class DropdownServiceImpl implements DropdownService {
         }
     }
 
+    @Override
+    public BaseResponse<DropdownKeyValuesResponse> getDropdownValues(String dropdownType, String formType) {
+
+        // return details of a particular dropdown or dropdowns belonging to particular form_type
+
+        DropdownType dropdownType1 = dropdownHelper.getDropdownType(dropdownType);
+        FormType formType1 = dropdownHelper.getFormType(formType);
+
+        // if both dropdownType and formType are present formType is given priority
+        if(formType1 != null){
+            return getFormDropdownValues(formType1);
+        }
+        else if(dropdownType1 != null){
+            return getSingleDropdownValues(dropdownType1);
+        }
+        else{
+            return BaseResponse.<DropdownKeyValuesResponse>builder().status(HttpStatus.BAD_REQUEST)
+                    .responseMsg("either of dropdownType or formType request parameters should contain valid value")
+                    .build();
+        }
+
+    }
+
+    private BaseResponse<DropdownKeyValuesResponse> getSingleDropdownValues(DropdownType dropdownType) {
+
+        DropdownKeyValuesResponse response = new DropdownKeyValuesResponse();
+        Map<String, DropdownKeyValuesDetails> map = new HashMap<>();
+
+        map.put(dropdownType.name(), getDropdownKeyValueDetails(dropdownType));
+
+        response.setDropdownKeyDetailsMap(map);
+
+        return BaseResponse.<DropdownKeyValuesResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg("fetched values")
+                .data(response)
+                .build();
+    }
+
+    private BaseResponse<DropdownKeyValuesResponse> getFormDropdownValues(FormType formType1) {
+
+        DropdownKeyValuesResponse response = new DropdownKeyValuesResponse();
+        List<DropdownType> dropdownTypes = dropdownHelper.getDropdownTypeList(formType1);
+
+        response.setDropdownKeyDetailsMap(getKeyValuesDetailsMap(dropdownTypes));
+
+        return BaseResponse.<DropdownKeyValuesResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg("fetched values")
+                .data(response)
+                .build();
+    }
+
+    private Map<String, DropdownKeyValuesDetails> getKeyValuesDetailsMap(List<DropdownType> dropdownTypes){
+
+        List<DropdownValue> dropdownValues;
+        if(dropdownTypes == null){
+            dropdownValues = dropdownRepository.findAll();
+        }
+        else{
+            dropdownValues = dropdownRepository.findByDropdownTypeIn(dropdownTypes);
+        }
+
+        Map<DropdownType, List<DropdownValueDetails>> map1 =
+        dropdownValues.stream().collect(
+                Collectors.groupingBy(
+                        DropdownValue::getDropdownType,
+                        Collectors.mapping( dropdownValue -> new DropdownValueDetails(dropdownValue), Collectors.toList())
+                ));
+
+        Map<String, DropdownKeyValuesDetails> keyValuesMap = new HashMap<>();
+
+        for(Map.Entry<DropdownType, List<DropdownValueDetails>> entry : map1.entrySet()){
+            DropdownKeyValuesDetails details = new DropdownKeyValuesDetails();
+                   details.setDropdownKey(entry.getKey().name());
+            details.setFormName(entry.getKey().getFormType().name());
+            details.setValues(entry.getValue());
+            keyValuesMap.put(entry.getKey().name(), details);
+        }
+
+        return keyValuesMap;
+    }
+
+
     private DropdownKeyValuesDetails getDropdownKeyValueDetails(DropdownType dropdownType) {
+
+        // returns detail related to a single dropdown
 
         DropdownKeyValuesDetails dropdownKeyValuesDetails = new DropdownKeyValuesDetails();
         dropdownKeyValuesDetails.setDropdownKey(dropdownType.name());
