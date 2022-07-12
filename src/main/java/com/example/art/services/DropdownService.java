@@ -4,6 +4,7 @@ import com.example.art.dto.BaseResponse;
 import com.example.art.dto.request.DropdownValueRequest;
 import com.example.art.dto.response.DropdownKeyValuesResponse;
 import com.example.art.dto.response.DropdownKeysResponse;
+import com.example.art.exceptions.MissingUserRequestParamException;
 
 public interface DropdownService {
 
@@ -15,6 +16,6 @@ public interface DropdownService {
 
     BaseResponse deleteDropdownValue(Long valueId);
 
-    BaseResponse<DropdownKeyValuesResponse> getDropdownValues(String dropdownType, String formType);
+    BaseResponse<DropdownKeyValuesResponse> getDropdownValues(String dropdownType, String formType) throws MissingUserRequestParamException;
 
 }

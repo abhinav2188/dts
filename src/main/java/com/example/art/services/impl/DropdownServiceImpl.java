@@ -3,6 +3,7 @@ package com.example.art.services.impl;
 import com.example.art.dto.BaseResponse;
 import com.example.art.dto.request.DropdownValueRequest;
 import com.example.art.dto.response.*;
+import com.example.art.exceptions.MissingUserRequestParamException;
 import com.example.art.helper.DropdownHelper;
 import com.example.art.model.DropdownValue;
 import com.example.art.model.enums.DropdownType;
@@ -97,14 +98,14 @@ public class DropdownServiceImpl implements DropdownService {
         catch (EmptyResultDataAccessException e){
             log.error("error deleting dropdown value with id={}, error: {}",valueId,e.getMessage());
             return BaseResponse.builder()
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.BAD_REQUEST)
                     .responseMsg("error deleting dropdown value, value doesn't exists")
                     .build();
         }
     }
 
     @Override
-    public BaseResponse<DropdownKeyValuesResponse> getDropdownValues(String dropdownType, String formType) {
+    public BaseResponse<DropdownKeyValuesResponse> getDropdownValues(String dropdownType, String formType) throws MissingUserRequestParamException {
 
         // return details of a particular dropdown or dropdowns belonging to particular form_type
 
@@ -119,9 +120,7 @@ public class DropdownServiceImpl implements DropdownService {
             return getSingleDropdownValues(dropdownType1);
         }
         else{
-            return BaseResponse.<DropdownKeyValuesResponse>builder().status(HttpStatus.BAD_REQUEST)
-                    .responseMsg("either of dropdownType or formType request parameters should contain valid value")
-                    .build();
+            throw new MissingUserRequestParamException("either of dropdownType or formType request parameters should contain valid value");
         }
 
     }
@@ -137,7 +136,7 @@ public class DropdownServiceImpl implements DropdownService {
 
         return BaseResponse.<DropdownKeyValuesResponse>builder()
                 .status(HttpStatus.OK)
-                .responseMsg("fetched values")
+                .responseMsg("returned '"+dropdownType.name()+"' dropdown values")
                 .data(response)
                 .build();
     }
@@ -151,7 +150,7 @@ public class DropdownServiceImpl implements DropdownService {
 
         return BaseResponse.<DropdownKeyValuesResponse>builder()
                 .status(HttpStatus.OK)
-                .responseMsg("fetched values")
+                .responseMsg("returned "+response.getDropdownKeyDetailsMap().size()+" dropdown key, values")
                 .data(response)
                 .build();
     }
