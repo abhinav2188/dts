@@ -23,7 +23,7 @@ public class UserIntController {
         return userService.getAllUsers(pageNo, pageSize);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/auth/{id}")
     public BaseResponse updateUserAuthorization(@PathVariable Long id,
                                                 @RequestBody UpdateUserAuthorizationRequest requestBody)
             throws UserNotFoundException, IllegalAccessException, NoSuchFieldException {

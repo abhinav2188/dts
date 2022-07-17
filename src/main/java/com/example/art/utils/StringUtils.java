@@ -1,5 +1,8 @@
 package com.example.art.utils;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class StringUtils {
 
     public String generateUpdateMsg(String param, Object oldVal, Object newVal) {

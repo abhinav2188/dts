@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow( () -> new UserNotFoundException("id",id));
         userMapper.updateUser(user, requestBody);
+        // todo : validate updated fields
         userRepository.save(user);
 
         return BaseResponse.builder()
@@ -106,6 +107,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow( () -> new UserNotFoundException("id",id));
         userMapper.updateUser(user, requestBody);
+        // todo : validate updated fields
         userRepository.save(user);
 
         return BaseResponse.builder()
