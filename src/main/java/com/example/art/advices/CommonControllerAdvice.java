@@ -1,8 +1,9 @@
 package com.example.art.advices;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.BusinessException;
 import com.example.art.exceptions.MissingUserRequestParamException;
+import com.example.art.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -73,5 +74,16 @@ public class CommonControllerAdvice {
                 .data(errors)
                 .build();
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse handleUserNotFoundException(UserNotFoundException ex){
+        log.error(ex.getMessage());
+        return BaseResponse.builder()
+                .status(HttpStatus.NOT_FOUND)
+                .responseMsg(ex.getMessage())
+                .build();
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package com.example.art.controllers;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DropdownKeyValuesResponse;
 import com.example.art.exceptions.MissingUserRequestParamException;
 import com.example.art.services.DropdownService;

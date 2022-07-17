@@ -1,6 +1,6 @@
 package com.example.art.controllers.internal;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.request.DropdownValueRequest;
 import com.example.art.services.DropdownService;
 import org.springframework.beans.factory.annotation.Autowired;

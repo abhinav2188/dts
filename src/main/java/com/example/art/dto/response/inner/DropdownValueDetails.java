@@ -1,4 +1,4 @@
-package com.example.art.dto.response;
+package com.example.art.dto.response.inner;
 
 import com.example.art.model.DropdownValue;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.art.services.impl;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.request.AddPartyRequestDto;
 import com.example.art.model.Party;
 import com.example.art.repository.PartyRepository;

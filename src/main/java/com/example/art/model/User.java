@@ -2,8 +2,10 @@ package com.example.art.model;
 
 import com.example.art.dto.request.CreateUserRequest;
 import com.example.art.model.abstracts.Timestamps;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -12,15 +14,13 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends Timestamps {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NaturalId
-    @Column(unique = true, nullable = false)
-    private String username;
 
     @NaturalId
     @Column(unique = true, nullable = false)
@@ -34,7 +34,7 @@ public class User extends Timestamps {
     @Column(nullable = false)
     private String password;
 
-    private boolean isActive;
+    private Boolean isActive;
 
     private String roles;
 
@@ -48,11 +48,9 @@ public class User extends Timestamps {
     private List<Deal> ownedDealList;
 
     public User(CreateUserRequest createUserRequest){
-        this.username = createUserRequest.getUsername();
         this.email = createUserRequest.getEmail();
         this.password = createUserRequest.getPassword();
         this.mobile = createUserRequest.getMobile();
-        this.designation = createUserRequest.getDesignation();
         this.isActive = true;
     }
 

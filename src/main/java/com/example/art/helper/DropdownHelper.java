@@ -1,6 +1,6 @@
 package com.example.art.helper;
 
-import com.example.art.dto.response.DropdownKeyDetails;
+import com.example.art.dto.response.inner.DropdownKeyDetails;
 import com.example.art.model.enums.DropdownType;
 import com.example.art.model.enums.FormType;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.example.art.controllers;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.request.AddPartyRequestDto;
 import com.example.art.services.PartyService;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,10 @@
 package com.example.art.services.impl;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.request.DropdownValueRequest;
 import com.example.art.dto.response.*;
+import com.example.art.dto.response.inner.DropdownKeyValuesDetails;
+import com.example.art.dto.response.inner.DropdownValueDetails;
 import com.example.art.exceptions.MissingUserRequestParamException;
 import com.example.art.helper.DropdownHelper;
 import com.example.art.model.DropdownValue;

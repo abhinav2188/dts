@@ -1,4 +1,4 @@
-package com.example.art.dto;
+package com.example.art.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

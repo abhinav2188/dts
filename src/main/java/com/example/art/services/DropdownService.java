@@ -1,6 +1,6 @@
 package com.example.art.services;
 
-import com.example.art.dto.BaseResponse;
+import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.request.DropdownValueRequest;
 import com.example.art.dto.response.DropdownKeyValuesResponse;
 import com.example.art.dto.response.DropdownKeysResponse;
