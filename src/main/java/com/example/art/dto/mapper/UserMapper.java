@@ -1,11 +1,13 @@
 package com.example.art.dto.mapper;
 
+import com.example.art.dto.request.CreateUserRequest;
 import com.example.art.dto.request.UpdateUserAuthorizationRequest;
 import com.example.art.dto.request.UpdateUserProfileRequest;
 import com.example.art.model.User;
 import com.example.art.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,6 +19,18 @@ public class UserMapper {
 
     @Autowired
     private StringUtils stringUtils;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public User createUser(CreateUserRequest createUserRequest){
+        User user = new User();
+        user.setMobile(createUserRequest.getMobile());
+        user.setEmail(createUserRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+        user.setIsActive(true);
+        return user;
+    }
 
     public void updateUser(User user, UpdateUserAuthorizationRequest request) {
         List<String> updateMsgs = new ArrayList<>();

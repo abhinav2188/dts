@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
         validateCreateUserRequest(createUserRequest);
 
-        User user = userRepository.save(new User(createUserRequest));
+        User user = userRepository.save(userMapper.createUser(createUserRequest));
 
         log.info("new user added with email: {}",user.getEmail());
 

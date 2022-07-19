@@ -47,11 +47,4 @@ public class User extends Timestamps {
     @OneToMany(mappedBy = "owner")
     private List<Deal> ownedDealList;
 
-    public User(CreateUserRequest createUserRequest){
-        this.email = createUserRequest.getEmail();
-        this.password = createUserRequest.getPassword();
-        this.mobile = createUserRequest.getMobile();
-        this.isActive = true;
-    }
-
 }
