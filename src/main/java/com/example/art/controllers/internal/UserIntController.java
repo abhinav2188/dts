@@ -26,13 +26,14 @@ public class UserIntController {
     @PatchMapping("/auth/{id}")
     public BaseResponse updateUserAuthorization(@PathVariable Long id,
                                                 @RequestBody UpdateUserAuthorizationRequest requestBody)
-            throws UserNotFoundException, IllegalAccessException, NoSuchFieldException {
+            throws UserNotFoundException {
         return userService.updateUserAuthorization(id, requestBody);
     }
 
     @PatchMapping("/{id}")
     public BaseResponse updateUserProfileDetails(@PathVariable Long id,
-                                                 @RequestBody UpdateUserProfileRequest requestBody) throws UserNotFoundException {
+                                                 @RequestBody UpdateUserProfileRequest requestBody)
+            throws UserNotFoundException {
         return userService.updateUserProfile(id, requestBody);
     }
 

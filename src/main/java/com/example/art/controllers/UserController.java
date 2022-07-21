@@ -18,11 +18,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public BaseResponse addUser(@Valid @RequestBody CreateUserRequest createUserRequest) throws DuplicateEntryException {
-        return userService.addNewUser(createUserRequest);
-    }
-
     @GetMapping("/{id}")
     public BaseResponse<UserResponse> getUser(@PathVariable Long id) throws UserNotFoundException {
         return userService.getUser(id);
