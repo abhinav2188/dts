@@ -2,5 +2,6 @@ package com.example.art.model.enums;
 
 public enum UserRole {
     ADMIN,
-    MODERATOR;
+    APP_MODERATOR,
+    BACKEND_MODERATOR;
 }
