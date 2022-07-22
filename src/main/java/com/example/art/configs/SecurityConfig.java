@@ -1,6 +1,7 @@
 package com.example.art.configs;
 
 import com.example.art.filters.JwtRequestFilter;
+import com.example.art.model.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,8 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .csrf().disable()
+                .cors().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/ext/users", "/api/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                .antMatchers("/api/int/**").hasRole(UserRole.ADMIN.name())
+                .antMatchers(HttpMethod.GET,"/api/ext/**").hasAnyRole(UserRole.MODERATOR.name(),UserRole.ADMIN.name())
+                .antMatchers("api/ext/**").hasRole(UserRole.MODERATOR.name())
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -1,6 +1,5 @@
 package com.example.art.services.impl;
 
-
 import com.example.art.dto.request.CreateUserRequest;
 import com.example.art.dto.request.LoginRequest;
 import com.example.art.dto.response.BaseResponse;
@@ -11,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,10 +32,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public BaseResponse<LoginResponse> loginUser(LoginRequest requestDto) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(requestDto.getEmail(),requestDto.getPassword())
-        );
+        //authenticating user
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword())
+            );
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw new BadCredentialsException("bad credentials");
+        }
 
+        // token generation
         UserDetails userDetails = userDetailsService.loadUserByUsername(requestDto.getEmail());
         String token = jwtUtil.generateToken(userDetails);
 

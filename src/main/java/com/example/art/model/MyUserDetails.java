@@ -28,7 +28,7 @@ public class MyUserDetails implements UserDetails {
     private List<? extends GrantedAuthority> generateAuthoritiesList(String roles){
         if(roles == null) return null;
         return Arrays.stream(roles.split(","))
-                .map(role -> new SimpleGrantedAuthority(role))
+                .map(role -> new SimpleGrantedAuthority("ROLE_"+role))
                 .collect(Collectors.toList());
     }
 

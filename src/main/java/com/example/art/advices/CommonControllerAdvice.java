@@ -94,6 +94,7 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler({UserNotFoundException.class, UsernameNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
     public BaseResponse handleUserNotFoundException(UserNotFoundException ex){
         log.error(ex.getMessage());
         return BaseResponse.builder()
@@ -102,5 +103,16 @@ public class CommonControllerAdvice {
                 .build();
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public BaseResponse handleException(Exception ex){
+        log.error(ex.getMessage());
+        ex.printStackTrace();
+        return BaseResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .responseMsg(ex.getMessage())
+                .build();
+    }
 
 }
