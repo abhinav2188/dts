@@ -4,7 +4,6 @@ import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.BusinessException;
 import com.example.art.exceptions.MissingUserRequestParamException;
 import com.example.art.exceptions.UserNotFoundException;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,22 +11,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class CommonControllerAdvice {
 
     @ExceptionHandler({AuthenticationException.class,BadCredentialsException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public BaseResponse handleException(BadCredentialsException ex){
         log.error("authentication error: {}", ex.getMessage());
         return BaseResponse.builder()
@@ -40,7 +35,6 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public BaseResponse handleMissingRequestParameterException(MissingServletRequestParameterException exception){
         log.error("Missing request parameter: {}", exception.getParameterName());
         return BaseResponse.builder()
@@ -51,7 +45,6 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler({MissingUserRequestParamException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public BaseResponse handleMissingRequestParamException(MissingUserRequestParamException exception){
         log.error(exception.getCustomMsg());
         return BaseResponse.builder()
@@ -63,7 +56,6 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler({BusinessException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public BaseResponse handleBusinessExceptions(BusinessException exception){
         log.error(exception.getCustomMsg());
         return BaseResponse.builder()
@@ -75,7 +67,6 @@ public class CommonControllerAdvice {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public BaseResponse handleInvalidRequestBodyException(MethodArgumentNotValidException ex){
         Map<String, String> errors = new HashMap<>();
@@ -94,7 +85,6 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler({UserNotFoundException.class, UsernameNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public BaseResponse handleUserNotFoundException(UserNotFoundException ex){
         log.error(ex.getMessage());
         return BaseResponse.builder()
@@ -105,7 +95,6 @@ public class CommonControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    @ResponseBody
     public BaseResponse handleException(Exception ex){
         log.error(ex.getMessage());
         ex.printStackTrace();
