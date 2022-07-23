@@ -2,13 +2,20 @@ package com.example.art.dto.request;
 
 import lombok.Data;
 
-@Data
-public class AddPartyRequestDto {
+import javax.validation.constraints.NotEmpty;
 
+@Data
+public class CreatePartyRequest {
+
+    @NotEmpty
     private String partyName;
 
     private String address;
 
     private String authority;
+
+    private String mobile;
+
+    private String email;
 
 }

@@ -1,9 +1,11 @@
 package com.example.art.model;
 
-import com.example.art.dto.request.AddPartyRequestDto;
 import com.example.art.model.abstracts.Timestamps;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,22 +19,28 @@ public class Party extends Timestamps {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NaturalId
+    @Column(unique = true, nullable = false)
     private String partyName;
 
     private String address;
 
     private String authority;
 
-    private boolean isActive;
+    private String mobile;
+
+    private String email;
+
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.DETACH)
+    @LazyCollection(LazyCollectionOption.TRUE)
     private List<Deal> dealList;
 
-    public Party(AddPartyRequestDto requestDto){
-        this.partyName = requestDto.getPartyName();
-        this.authority = requestDto.getAuthority();
-        this.address = requestDto.getAddress();
-        this.isActive = true;
-    }
+//    public Party addDeal(Deal deal){
+//        dealList.add(deal);
+//        deal.setParty(this);
+//        return this;
+//    }
 
 }

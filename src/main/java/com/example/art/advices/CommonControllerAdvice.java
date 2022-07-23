@@ -2,6 +2,7 @@ package com.example.art.advices;
 
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.BusinessException;
+import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.MissingUserRequestParamException;
 import com.example.art.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -83,9 +84,9 @@ public class CommonControllerAdvice {
                 .build();
     }
 
-    @ExceptionHandler({UserNotFoundException.class, UsernameNotFoundException.class})
+    @ExceptionHandler({EntityNotFoundException.class, UserNotFoundException.class, UsernameNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BaseResponse handleUserNotFoundException(UserNotFoundException ex){
+    public BaseResponse handleUserNotFoundException(Exception ex){
         log.error(ex.getMessage());
         return BaseResponse.builder()
                 .status(HttpStatus.NOT_FOUND)
