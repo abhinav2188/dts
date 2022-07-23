@@ -1,10 +1,7 @@
 package com.example.art.services;
 
 import com.example.art.dto.CreateDealResponse;
-import com.example.art.dto.request.CreateDealRequest;
-import com.example.art.dto.request.UpdateDealSection3Request;
-import com.example.art.dto.request.UpdateDealSection4Request;
-import com.example.art.dto.request.UpdateProductDetailsRequest;
+import com.example.art.dto.request.*;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.DuplicateEntryException;
 import com.example.art.exceptions.EntityNotFoundException;
@@ -20,4 +17,6 @@ public interface DealService {
     BaseResponse updateDealSection3(Long dealId, UpdateDealSection3Request requestDto) throws EntityNotFoundException, NoAuthorizationException;
 
     BaseResponse updateDealSection4(Long dealId, UpdateDealSection4Request requestDto) throws EntityNotFoundException, NoAuthorizationException;
+
+    BaseResponse updateDealAuthorization(Long dealId, UpdateDealAuthorizationRequest request) throws EntityNotFoundException;
 }

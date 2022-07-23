@@ -1,5 +1,6 @@
 package com.example.art.controllers.internal;
 
+import com.example.art.dto.request.UpdateDealAuthorizationRequest;
 import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
@@ -21,5 +22,12 @@ public class DealIntController {
                                              @RequestBody UpdateDealSection4Request requestDto)
             throws NoAuthorizationException, EntityNotFoundException {
         return dealService.updateDealSection4(dealId, requestDto);
+    }
+
+    @PatchMapping("/{dealId}/auth")
+    public BaseResponse updateDealAuthorization(@PathVariable Long dealId,
+                                                @RequestBody UpdateDealAuthorizationRequest request)
+            throws EntityNotFoundException {
+        return dealService.updateDealAuthorization(dealId, request);
     }
 }

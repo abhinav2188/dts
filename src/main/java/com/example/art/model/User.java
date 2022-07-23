@@ -53,4 +53,9 @@ public class User extends Timestamps {
         deal.getCoOwners().add(this);
     }
 
+    public void removeDeal(Deal deal){
+//        this.coOwnedDeals.remove(deal);
+        deal.getCoOwners().remove(this);
+    }
+
 }

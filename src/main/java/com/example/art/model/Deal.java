@@ -116,6 +116,10 @@ public class Deal extends Timestamps {
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Contact> contacts;
 
+    public void removeUser(User user) {
+        this.getCoOwners().remove(user);
+    }
+
     // todo : brochures
     // todo : attachments
 
