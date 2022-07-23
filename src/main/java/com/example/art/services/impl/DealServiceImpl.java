@@ -4,6 +4,7 @@ import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.mapper.DealMapper;
 import com.example.art.dto.request.CreateDealRequest;
 import com.example.art.dto.request.UpdateDealSection3Request;
+import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.DuplicateEntryException;
@@ -109,6 +110,27 @@ public class DealServiceImpl implements DealService {
                 .build();
     }
 
+    @Override
+    public BaseResponse updateDealSection4(Long dealId, UpdateDealSection4Request requestDto)
+            throws EntityNotFoundException, NoAuthorizationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        User user = validateUserAuthorization(deal);
+
+        int updateCount = dealMapper.updateDeal(deal,requestDto);
+
+        dealRepository.save(deal);
+
+        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
+        return BaseResponse.builder()
+                .responseMsg(msg)
+                .status(HttpStatus.CREATED)
+                .build();
+
+    }
+
     private User validateUserAuthorization(Deal deal) throws NoAuthorizationException {
         Long userId = Long.parseLong(MDC.get(Constants.USER_ID));
         return deal.getCoOwners().stream()
@@ -122,10 +144,6 @@ public class DealServiceImpl implements DealService {
         if(dealRepository.existsByName(requestDto.getDealName())){
             throw new DuplicateEntryException("dealName");
         }
-//        if(userRepository.existsById(requestDto.getUserId()))
-//            throw new InvalidFieldException("userId");
-//        if(partyRepository.existsById(requestDto.getPartyId()))
-//            throw new InvalidFieldException("partyId");
     }
 
 }

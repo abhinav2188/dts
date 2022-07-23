@@ -75,6 +75,11 @@ public class Deal extends Timestamps {
 
     // additional details - section 4
 
+    @Enumerated(EnumType.STRING)
+    private DealStage dealStage;
+
+    private Boolean isActive;
+
     private Double dealValueInCr;
 
     private String paymentTerms;
@@ -89,13 +94,7 @@ public class Deal extends Timestamps {
 
     private String proximityFromBase;
 
-
     // deal section 5
-
-    @Enumerated(EnumType.STRING)
-    private DealStage dealStage;
-
-    private Boolean isActive;
 
     @JsonIgnore
     @ManyToOne
