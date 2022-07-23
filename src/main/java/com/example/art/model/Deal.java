@@ -4,6 +4,8 @@ import com.example.art.model.abstracts.Timestamps;
 import com.example.art.model.enums.DealStage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,6 +21,7 @@ public class Deal extends Timestamps {
     private Long id;
 
     // section 1
+    @Column(unique = true, nullable = false)
     private String name;
 
     @Temporal(TemporalType.DATE)
@@ -48,11 +51,15 @@ public class Deal extends Timestamps {
 
     private String cateredByVertical;
 
+    private Boolean isActive;
+
     @ManyToOne
+    @JoinColumn
     private User owner;
 
-    @ManyToMany
-    private List<User> coOwnerList;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "deals_co_owners")
+    private List<User> coOwners;
 
     private Double dealValueInCr;
 
@@ -83,9 +90,11 @@ public class Deal extends Timestamps {
     private Party party;
 
     @OneToMany(mappedBy = "deal")
-    private List<Interaction> interactionList;
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<Interaction> interactions;
 
     @OneToMany(mappedBy = "deal")
-    private List<Contact> contactList;
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<Contact> contacts;
 
 }

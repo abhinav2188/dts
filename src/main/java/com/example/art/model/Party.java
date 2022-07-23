@@ -35,12 +35,12 @@ public class Party extends Timestamps {
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.DETACH)
     @LazyCollection(LazyCollectionOption.TRUE)
-    private List<Deal> dealList;
+    private List<Deal> deals;
 
-//    public Party addDeal(Deal deal){
-//        dealList.add(deal);
-//        deal.setParty(this);
-//        return this;
-//    }
+    public Party addDeal(Deal deal){
+        this.deals.add(deal);
+        deal.setParty(this);
+        return this;
+    }
 
 }

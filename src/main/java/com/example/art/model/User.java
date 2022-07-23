@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -38,13 +39,18 @@ public class User extends Timestamps {
 
     private String roles;
 
-    @ManyToMany
-    private List<Deal> dealList;
+    @ManyToMany(mappedBy = "coOwners")
+    private List<Deal> coOwnedDeals;
 
     @OneToMany(mappedBy = "handler")
-    private List<Interaction> interactionList;
+    private List<Interaction> interactions;
 
     @OneToMany(mappedBy = "owner")
-    private List<Deal> ownedDealList;
+    private List<Deal> ownedDeals;
+
+    public void addDeal(Deal deal){
+        this.coOwnedDeals.add(deal);
+        deal.getCoOwners().add(this);
+    }
 
 }

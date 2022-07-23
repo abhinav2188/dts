@@ -55,7 +55,7 @@ public class PartyMapper {
         response.setPartyName(party1.getPartyName());
         response.setMobile(party1.getMobile());
         response.setIsActive(party1.getIsActive());
-        response.setDealsCount(party1.getDealList().size());
+        response.setDealsCount(party1.getDeals().size());
         return response;
     }
 
