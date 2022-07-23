@@ -3,6 +3,7 @@ package com.example.art.services.impl;
 import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.mapper.DealMapper;
 import com.example.art.dto.request.CreateDealRequest;
+import com.example.art.dto.request.UpdateDealSection3Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.DuplicateEntryException;
@@ -81,7 +82,27 @@ public class DealServiceImpl implements DealService {
 
         dealRepository.save(deal);
 
-        String msg = "Updated " + updateCount + " fields of product with id=" + dealId;
+        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
+        return BaseResponse.builder()
+                .responseMsg(msg)
+                .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    @Override
+    public BaseResponse updateDealSection3(Long dealId, UpdateDealSection3Request requestDto)
+            throws EntityNotFoundException, NoAuthorizationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        User user = validateUserAuthorization(deal);
+
+        int updateCount = dealMapper.updateDeal(deal,requestDto);
+
+        dealRepository.save(deal);
+
+        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
         return BaseResponse.builder()
                 .responseMsg(msg)
                 .status(HttpStatus.CREATED)

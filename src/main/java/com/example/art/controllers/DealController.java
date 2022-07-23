@@ -2,6 +2,7 @@ package com.example.art.controllers;
 
 import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.request.CreateDealRequest;
+import com.example.art.dto.request.UpdateDealSection3Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.DuplicateEntryException;
@@ -30,6 +31,13 @@ public class DealController {
                                              @RequestBody UpdateProductDetailsRequest requestDto)
             throws NoAuthorizationException, EntityNotFoundException {
         return dealService.updateProductDetails(dealId, requestDto);
+    }
+
+    @PatchMapping("/{dealId}/s3")
+    public BaseResponse updateDealDetails(@PathVariable Long dealId,
+                                          @RequestBody UpdateDealSection3Request requestDto)
+            throws NoAuthorizationException, EntityNotFoundException {
+        return dealService.updateDealSection3(dealId, requestDto);
     }
 
 }
