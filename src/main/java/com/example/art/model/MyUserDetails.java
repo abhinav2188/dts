@@ -17,12 +17,14 @@ public class MyUserDetails implements UserDetails {
     String email;
     String password;
     boolean isActive;
+    Long userId;
 
     public MyUserDetails(User user){
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.isActive = user.getIsActive();
         this.grantedAuthorities = generateAuthoritiesList(user.getRoles());
+        this.userId = user.getId();
     }
 
     private List<? extends GrantedAuthority> generateAuthoritiesList(String roles){
@@ -65,5 +67,9 @@ public class MyUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.isActive;
+    }
+
+    public Long getUserId() {
+        return this.userId;
     }
 }

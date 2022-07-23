@@ -2,6 +2,8 @@ package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
 import com.example.art.model.enums.DealStage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.LazyCollection;
@@ -16,13 +18,41 @@ import java.util.List;
 @Entity
 public class Deal extends Timestamps {
 
+    // initial entry
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // section 1
     @Column(unique = true, nullable = false)
     private String name;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn
+    private Party party;
+
+    // product details - section 2
+
+    private String productType;
+
+    private String subCategoryProduct;
+
+    private String unitOfQuantity;
+
+    private String orderSizeFactor;
+
+    private String typeOfWork;
+
+    private String roadDetails;
+
+    // deal details - section 3
+
+    private String siteLocation;
+
+    private String cateredByVertical;
+
+    private String paymentType;
 
     @Temporal(TemporalType.DATE)
     private Date openingDate;
@@ -35,66 +65,59 @@ public class Deal extends Timestamps {
 
     private Integer expectedNumberOfDays;
 
-    private String siteLocation;
-
-    @Enumerated(EnumType.STRING)
-    private DealStage dealStage;
-
-    private String productDetails;
-
-    private String roadDetails;
-
-    // section 2
-    private String workType;
-
-    private String subCategory;
-
-    private String cateredByVertical;
-
-    private Boolean isActive;
-
-    @ManyToOne
-    @JoinColumn
-    private User owner;
-
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "deals_co_owners")
-    private List<User> coOwners;
-
-    private Double dealValueInCr;
-
-    private String paymentTerms;
-
-    private String paymentType;
-
-    private Double paymentFactor;
-
-    private String unitOfQuantity;
-
-    private String orderSizeFactor;
+    private String expectedDeliveryAddress;
 
     private String lastPurchaseDetails;
 
     private String competitorsInfo;
 
+    private String remarks;
+
+    // additional details - section 4
+
+    private Double dealValueInCr;
+
+    private String paymentTerms;
+
+    private Double paymentFactor;
+
     private Integer ownerFocus;
 
     private Double dealProbability;
 
-    private Long expectedTurnover;
+    private String expectedTurnover;
 
-    private Long proximityFromBase;
+    private String proximityFromBase;
 
+
+    // deal section 5
+
+    @Enumerated(EnumType.STRING)
+    private DealStage dealStage;
+
+    private Boolean isActive;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn
-    private Party party;
+    private User owner;
 
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "deals_co_owners")
+    private List<User> coOwners;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "deal")
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Interaction> interactions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "deal")
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Contact> contacts;
+
+    // todo : brochures
+    // todo : attachments
 
 }

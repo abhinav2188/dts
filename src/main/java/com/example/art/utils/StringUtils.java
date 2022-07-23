@@ -13,4 +13,8 @@ public class StringUtils {
         return val == null ? "null" : val.toString();
     }
 
+    public boolean isUpdateable(Object oldVal, Object newVal){
+        return newVal!= null && !newVal.equals(oldVal);
+    }
+
 }
