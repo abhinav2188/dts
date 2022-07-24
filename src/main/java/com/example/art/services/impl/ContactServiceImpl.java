@@ -3,6 +3,7 @@ package com.example.art.services.impl;
 import com.example.art.dto.mapper.ContactMapper;
 import com.example.art.dto.request.CreateContactRequest;
 import com.example.art.dto.response.BaseResponse;
+import com.example.art.dto.response.ContactsResponse;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Contact;
@@ -15,6 +16,10 @@ import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +55,28 @@ public class ContactServiceImpl implements ContactService {
                 .build();
     }
 
+    @Override
+    public BaseResponse<ContactsResponse> getDealContacts(Long dealId, int pageNo, int pageSize)
+            throws EntityNotFoundException, NoAuthorizationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        checkUserAuthorization(deal);
+
+        Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by("name").descending());
+        Page<Contact> contacts = contactRepository.findAllByDealId(dealId,pageable);
+
+        ContactsResponse response = mapper.getContactsResponse(contacts);
+
+        return BaseResponse.<ContactsResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg(MessageUtils.successGetMessage("Contact",response.getContacts().size()))
+                .data(response)
+                .build();
+
+    }
+
     private boolean isUserAdmin() {
         String roles = MDC.get(Constants.USER_ROLES);
         if(roles != null)
@@ -71,6 +98,5 @@ public class ContactServiceImpl implements ContactService {
                 .orElseThrow(
                         () -> new NoAuthorizationException(MessageUtils.noAuthorization("Deal")));
     }
-
 
 }

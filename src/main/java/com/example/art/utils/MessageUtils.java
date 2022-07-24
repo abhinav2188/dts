@@ -17,4 +17,8 @@ public class MessageUtils {
     public static String successPostMessage(String entity) {
         return "Successfully created "+entity;
     }
+
+    public static String successGetMessage(String entity, int count){
+        return "Successfully fetched " + count + entity + " from database";
+    }
 }

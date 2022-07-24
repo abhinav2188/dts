@@ -2,6 +2,7 @@ package com.example.art.controllers;
 
 import com.example.art.dto.request.CreateContactRequest;
 import com.example.art.dto.response.BaseResponse;
+import com.example.art.dto.response.ContactsResponse;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.services.ContactService;
@@ -23,5 +24,15 @@ public class ContactController {
             throws NoAuthorizationException, EntityNotFoundException {
         return contactService.addContact(dealId,request);
     }
+
+    @GetMapping("/{dealId}")
+    public BaseResponse<ContactsResponse> getDealContacts(@PathVariable Long dealId,
+                                                          @RequestParam(name = "pageNo") int pageNo,
+                                                          @RequestParam(name = "pageSize", defaultValue = "20") int pageSize)
+            throws NoAuthorizationException, EntityNotFoundException {
+        return contactService.getDealContacts(dealId, pageNo, pageSize);
+    }
+
+
 
 }
