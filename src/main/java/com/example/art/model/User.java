@@ -1,12 +1,10 @@
 package com.example.art.model;
 
-import com.example.art.dto.request.CreateUserRequest;
 import com.example.art.model.abstracts.Timestamps;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -42,20 +40,12 @@ public class User extends Timestamps {
     @ManyToMany(mappedBy = "coOwners")
     private List<Deal> coOwnedDeals;
 
-    @OneToMany(mappedBy = "handler")
-    private List<Interaction> interactions;
-
     @OneToMany(mappedBy = "owner")
     private List<Deal> ownedDeals;
 
     public void addDeal(Deal deal){
         this.coOwnedDeals.add(deal);
         deal.getCoOwners().add(this);
-    }
-
-    public void removeDeal(Deal deal){
-//        this.coOwnedDeals.remove(deal);
-        deal.getCoOwners().remove(this);
     }
 
 }

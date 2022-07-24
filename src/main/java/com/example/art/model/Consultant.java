@@ -9,7 +9,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Contact extends Timestamps {
+public class Consultant extends Timestamps {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

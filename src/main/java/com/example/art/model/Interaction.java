@@ -25,17 +25,15 @@ public class Interaction{
 
     private String meetingDetails;
 
-    @ManyToMany
-    private List<Contact> meetingPersons;
+    private String contacts;
+
+    private String consultants;
+
+    private String handlers;
 
     // bidirectional
     @ManyToOne
     @JoinColumn
     private Deal deal;
-
-    // bidirectional
-    @ManyToOne
-    @JoinColumn
-    private User handler;
 
 }
