@@ -21,4 +21,8 @@ public class MessageUtils {
     public static String successGetMessage(String entity, int count){
         return "Successfully fetched " + count + entity + " from database";
     }
+
+    public static String successDeleteMessage(String entity) {
+        return "Successfully deleted " + entity;
+    }
 }

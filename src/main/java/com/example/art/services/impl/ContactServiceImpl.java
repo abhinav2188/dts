@@ -77,6 +77,25 @@ public class ContactServiceImpl implements ContactService {
 
     }
 
+    @Override
+    public BaseResponse deleteContact(Long contactId) throws EntityNotFoundException, NoAuthorizationException {
+
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow( () -> new EntityNotFoundException("Contact","id",contactId));
+
+        Deal deal = contact.getDeal();
+
+        checkUserAuthorization(deal);
+
+        contactRepository.delete(contact);
+
+        return BaseResponse.builder()
+                .status(HttpStatus.OK)
+                .responseMsg(MessageUtils.successDeleteMessage("Contact"))
+                .build();
+
+    }
+
     private boolean isUserAdmin() {
         String roles = MDC.get(Constants.USER_ROLES);
         if(roles != null)

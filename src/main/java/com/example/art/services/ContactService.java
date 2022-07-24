@@ -11,4 +11,6 @@ public interface ContactService {
     BaseResponse addContact(Long dealId, CreateContactRequest request) throws EntityNotFoundException, NoAuthorizationException;
 
     BaseResponse<ContactsResponse> getDealContacts(Long dealId, int pageNo, int pageSize) throws EntityNotFoundException, NoAuthorizationException;
+
+    BaseResponse deleteContact(Long contactId) throws EntityNotFoundException, NoAuthorizationException;
 }

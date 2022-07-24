@@ -33,6 +33,12 @@ public class ContactController {
         return contactService.getDealContacts(dealId, pageNo, pageSize);
     }
 
+    @DeleteMapping("/{contactId}")
+    public BaseResponse deleteContact(@PathVariable Long contactId)
+            throws NoAuthorizationException, EntityNotFoundException {
+        return contactService.deleteContact(contactId);
+    }
+
 
 
 }

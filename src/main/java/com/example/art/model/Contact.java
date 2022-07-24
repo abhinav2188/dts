@@ -23,7 +23,7 @@ public class Contact extends Timestamps {
 
     private String designation;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn
     private Deal deal;
 
