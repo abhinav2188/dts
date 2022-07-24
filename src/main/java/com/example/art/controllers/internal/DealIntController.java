@@ -2,7 +2,6 @@ package com.example.art.controllers.internal;
 
 import com.example.art.dto.request.UpdateDealAuthorizationRequest;
 import com.example.art.dto.request.UpdateDealSection4Request;
-import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;

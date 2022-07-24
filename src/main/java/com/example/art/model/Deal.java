@@ -27,9 +27,9 @@ public class Deal extends Timestamps {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Party party;
 
     // product details - section 2

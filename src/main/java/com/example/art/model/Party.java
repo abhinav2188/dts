@@ -1,6 +1,8 @@
 package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.LazyCollection;
@@ -33,6 +35,7 @@ public class Party extends Timestamps {
 
     private Boolean isActive;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "party", cascade = CascadeType.DETACH)
     @LazyCollection(LazyCollectionOption.TRUE)
     private List<Deal> deals;

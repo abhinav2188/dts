@@ -4,6 +4,7 @@ import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.mapper.DealMapper;
 import com.example.art.dto.request.*;
 import com.example.art.dto.response.BaseResponse;
+import com.example.art.dto.response.MultipleDealsResponse;
 import com.example.art.exceptions.DuplicateEntryException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.InvalidFieldException;
@@ -11,15 +12,21 @@ import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Deal;
 import com.example.art.model.Party;
 import com.example.art.model.User;
+import com.example.art.model.enums.UserRole;
 import com.example.art.repository.DealRepository;
 import com.example.art.repository.PartyRepository;
 import com.example.art.repository.UserRepository;
 import com.example.art.services.DealService;
 import com.example.art.utils.Constants;
+import com.example.art.utils.MessageUtils;
 import com.example.art.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -204,6 +211,43 @@ public class DealServiceImpl implements DealService {
                 .build();
 
         // todo : try to optimize query
+    }
+
+    @Override
+    public BaseResponse<MultipleDealsResponse> getMultipleDeals(int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("updateTimestamp").descending());
+        Page<Deal> page = null;
+        if(isUserAdmin()){
+            page = dealRepository.findAll(pageable);
+        }else{
+            Long userId = getUserId();
+            page = dealRepository.findAllByCoOwners_Id(userId,pageable);
+        }
+
+        MultipleDealsResponse response = dealMapper.getMultipleDealsResponse(page);
+
+        String msg = MessageUtils.successMultipleDealResponse(response.getDeals().size());
+
+        return BaseResponse.<MultipleDealsResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg(msg)
+                .data(response)
+                .build();
+    }
+
+
+
+    private boolean isUserAdmin() {
+        String roles = MDC.get(Constants.USER_ROLES);
+        if(roles != null)
+            return roles.contains(UserRole.ADMIN.name());
+        return false;
+    }
+
+    private Long getUserId(){
+        Long userId = Long.parseLong(MDC.get(Constants.USER_ID));
+        return userId;
     }
 
     private User validateUserAuthorization(Deal deal) throws NoAuthorizationException {

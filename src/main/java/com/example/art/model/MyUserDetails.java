@@ -18,6 +18,7 @@ public class MyUserDetails implements UserDetails {
     String password;
     boolean isActive;
     Long userId;
+    String roles;
 
     public MyUserDetails(User user){
         this.email = user.getEmail();
@@ -25,6 +26,7 @@ public class MyUserDetails implements UserDetails {
         this.isActive = user.getIsActive();
         this.grantedAuthorities = generateAuthoritiesList(user.getRoles());
         this.userId = user.getId();
+        this.roles = user.getRoles();
     }
 
     private List<? extends GrantedAuthority> generateAuthoritiesList(String roles){
@@ -71,5 +73,9 @@ public class MyUserDetails implements UserDetails {
 
     public Long getUserId() {
         return this.userId;
+    }
+
+    public String getRoles() {
+        return roles;
     }
 }

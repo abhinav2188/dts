@@ -32,5 +32,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("populating userDetails in MDC");
         MDC.put(Constants.USER_ID, String.valueOf(myUserDetails.getUserId()));
         MDC.put(Constants.USER_EMAIL, myUserDetails.getUsername());
+        MDC.put(Constants.USER_ROLES, myUserDetails.getRoles());
     }
 }
