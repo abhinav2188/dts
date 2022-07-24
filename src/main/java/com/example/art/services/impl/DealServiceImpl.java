@@ -4,6 +4,8 @@ import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.mapper.DealMapper;
 import com.example.art.dto.request.*;
 import com.example.art.dto.response.BaseResponse;
+import com.example.art.dto.response.DealDetailResponse;
+import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
 import com.example.art.exceptions.DuplicateEntryException;
 import com.example.art.exceptions.EntityNotFoundException;
@@ -221,7 +223,7 @@ public class DealServiceImpl implements DealService {
         if(isUserAdmin()){
             page = dealRepository.findAll(pageable);
         }else{
-            Long userId = getUserId();
+            Long userId = getCurrentUserId();
             page = dealRepository.findAllByCoOwners_Id(userId,pageable);
         }
 
@@ -236,6 +238,45 @@ public class DealServiceImpl implements DealService {
                 .build();
     }
 
+    @Override
+    public BaseResponse<DealDetailResponse> getDealDetails(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        if(!isUserAdmin()){
+            if(!getCurrentUserId().equals(userId))
+                throw new NoAuthorizationException(MessageUtils.noAuthorization("Deal"));
+            validateUserAuthorization(deal);
+        }
+
+        DealDetailResponse response = dealMapper.getDealDetailResponse(deal, deal.getOwner(), deal.getCoOwners());
+
+        return BaseResponse.<DealDetailResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg(MessageUtils.successGetMessage("Deal"))
+                .data(response)
+                .build();
+    }
+
+    @Override
+    public BaseResponse<DealDetailResponse2> getDealDetails2(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        if(!getCurrentUserId().equals(userId))
+            throw new NoAuthorizationException(MessageUtils.noAuthorization("Deal"));
+        validateUserAuthorization(deal);
+
+        DealDetailResponse2 response = dealMapper.getDealDetailResponse2(deal);
+
+        return BaseResponse.<DealDetailResponse2>builder()
+                .status(HttpStatus.OK)
+                .responseMsg(MessageUtils.successGetMessage("Deal"))
+                .data(response)
+                .build();
+    }
 
 
     private boolean isUserAdmin() {
@@ -245,7 +286,7 @@ public class DealServiceImpl implements DealService {
         return false;
     }
 
-    private Long getUserId(){
+    private Long getCurrentUserId(){
         Long userId = Long.parseLong(MDC.get(Constants.USER_ID));
         return userId;
     }
@@ -256,7 +297,7 @@ public class DealServiceImpl implements DealService {
                 .filter(user -> user.getId().equals(userId))
                 .findAny()
                 .orElseThrow(
-                        () -> new NoAuthorizationException("user is not authorized to update this deal"));
+                        () -> new NoAuthorizationException(MessageUtils.noAuthorization("Deal")));
     }
 
     private void validateCreateDealRequest(CreateDealRequest requestDto) throws InvalidFieldException, DuplicateEntryException {

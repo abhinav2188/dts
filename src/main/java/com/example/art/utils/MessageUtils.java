@@ -6,4 +6,12 @@ public class MessageUtils {
         return "fetched " + count + " deals from database";
     }
 
+    public static String noAuthorization(String entity){
+        return "User is not authorized to view/update this "+entity;
+    }
+
+    public static String successGetMessage(String entity){
+        return "Successfully fetched "+entity;
+    }
+
 }

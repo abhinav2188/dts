@@ -3,6 +3,7 @@ package com.example.art.controllers.internal;
 import com.example.art.dto.request.UpdateDealAuthorizationRequest;
 import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.response.BaseResponse;
+import com.example.art.dto.response.DealDetailResponse;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.services.DealService;
@@ -29,4 +30,12 @@ public class DealIntController {
             throws EntityNotFoundException {
         return dealService.updateDealAuthorization(dealId, request);
     }
+
+    @GetMapping("/{dealId}")
+    public BaseResponse<DealDetailResponse> getDealDetails(@PathVariable Long dealId,
+                                                           @RequestParam(name = "userId") Long userId)
+            throws NoAuthorizationException, EntityNotFoundException {
+        return dealService.getDealDetails(dealId,userId);
+    }
+
 }

@@ -19,6 +19,16 @@ import java.util.Map;
 @Slf4j
 public class CommonControllerAdvice {
 
+    @ExceptionHandler({NoAuthorizationException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public BaseResponse handleException(NoAuthorizationException ex){
+        return BaseResponse.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .responseMsg(ex.getMessage())
+                .responseCode(String.valueOf(HttpStatus.FORBIDDEN.value()))
+                .build();
+    }
+
     @ExceptionHandler({InvalidFieldException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public BaseResponse handleException(InvalidFieldException ex){

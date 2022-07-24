@@ -5,9 +5,12 @@ import com.example.art.dto.request.CreateDealRequest;
 import com.example.art.dto.request.UpdateDealSection3Request;
 import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
+import com.example.art.dto.response.DealDetailResponse;
+import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
-import com.example.art.dto.response.inner.DealCardDetails;
+import com.example.art.dto.response.inner.*;
 import com.example.art.model.Deal;
+import com.example.art.model.User;
 import com.example.art.utils.MapperUtils;
 import com.example.art.utils.MessageUtils;
 import com.example.art.utils.StringUtils;
@@ -85,5 +88,46 @@ public class DealMapper {
         dealCardDetails.setPartyId(deal.getParty().getId());
         dealCardDetails.setPartyName(deal.getParty().getPartyName());
         return dealCardDetails;
+    }
+
+    public DealDetailResponse getDealDetailResponse(Deal deal, User owner, List<User> coOwners) {
+        DealDetailResponse dealDetailResponse = new DealDetailResponse();
+        DealProductDetails productDetails = new DealProductDetails();
+        mapperUtils.updateResponseFromEntity(deal, productDetails);
+        DealCommonDetails commonDetails = new DealCommonDetails();
+        mapperUtils.updateResponseFromEntity(deal, commonDetails);
+        DealAdditionalDetails additionalDetails = new DealAdditionalDetails();
+        mapperUtils.updateResponseFromEntity(deal, additionalDetails);
+        DealAuthorizationDetails authorizationDetails = new DealAuthorizationDetails();
+        authorizationDetails.setOwner(getDealUserDetails(owner));
+        List<DealUserDetails> coOwnerDetails = coOwners.stream().map(this::getDealUserDetails)
+                .collect(Collectors.toList());
+        authorizationDetails.setCoOwners(coOwnerDetails);
+        dealDetailResponse.setProductDetails(productDetails);
+        dealDetailResponse.setCommonDetails(commonDetails);
+        dealDetailResponse.setAdditionalDetails(additionalDetails);
+        dealDetailResponse.setAuthorizationDetails(authorizationDetails);
+        return dealDetailResponse;
+     }
+
+    private DealUserDetails getDealUserDetails(User user) {
+        if(user == null) return null;
+        DealUserDetails details = new DealUserDetails();
+        mapperUtils.updateResponseFromEntity(user, details);
+        return details;
+    }
+
+    public DealDetailResponse2 getDealDetailResponse2(Deal deal) {
+        DealDetailResponse2 dealDetailResponse = new DealDetailResponse2();
+        DealProductDetails productDetails = new DealProductDetails();
+        mapperUtils.updateResponseFromEntity(deal, productDetails);
+        DealCommonDetails commonDetails = new DealCommonDetails();
+        mapperUtils.updateResponseFromEntity(deal, commonDetails);
+        DealAdditionalDetails additionalDetails = new DealAdditionalDetails();
+        mapperUtils.updateResponseFromEntity(deal, additionalDetails);
+        dealDetailResponse.setProductDetails(productDetails);
+        dealDetailResponse.setCommonDetails(commonDetails);
+        dealDetailResponse.setAdditionalDetails(additionalDetails);
+        return dealDetailResponse;
     }
 }
