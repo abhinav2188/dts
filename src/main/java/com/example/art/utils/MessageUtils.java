@@ -25,4 +25,8 @@ public class MessageUtils {
     public static String successDeleteMessage(String entity) {
         return "Successfully deleted " + entity;
     }
+
+    public static String successUpdateMessage(String entity) {
+        return "Successfully updated "+entity;
+    }
 }

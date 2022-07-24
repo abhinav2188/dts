@@ -1,5 +1,6 @@
 package com.example.art.model;
 
+import com.example.art.model.abstracts.Timestamps;
 import com.example.art.model.enums.DealStage;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Interaction{
+public class Interaction extends Timestamps {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
