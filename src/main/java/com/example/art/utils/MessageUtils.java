@@ -29,4 +29,8 @@ public class MessageUtils {
     public static String successUpdateMessage(String entity) {
         return "Successfully updated "+entity;
     }
+
+    public static String failureFileStorage(String fileName) {
+        return "Failure uploading file '"+ fileName+ "'";
+    }
 }
