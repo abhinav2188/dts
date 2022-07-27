@@ -10,6 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AttachmentsResponse {
 
+    private int totalCount;
+
     private List<AttachmentDetails> info;
 
 }

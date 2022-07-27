@@ -1,4 +1,4 @@
-package com.example.art.dto.response.inner;
+package com.example.art.model.views;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,7 +6,8 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class AttachmentDetails {
+@AllArgsConstructor
+public class DocumentView {
 
     private Date createTimestamp;
 
@@ -15,7 +16,5 @@ public class AttachmentDetails {
     private String documentName;
 
     private String documentType;
-
-    private String path;
 
 }

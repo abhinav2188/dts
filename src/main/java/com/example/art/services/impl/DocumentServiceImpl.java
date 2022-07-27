@@ -1,6 +1,6 @@
 package com.example.art.services.impl;
 
-import com.example.art.dto.mapper.DocumentsMapper;
+import com.example.art.dto.mapper.DocumentMapper;
 import com.example.art.dto.response.AttachmentsResponse;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.SuccessCreateResponse;
@@ -10,7 +10,7 @@ import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Deal;
 import com.example.art.model.Document;
-import com.example.art.repository.DealRepository;
+import com.example.art.model.views.DocumentView;
 import com.example.art.repository.DocumentRepository;
 import com.example.art.services.DocumentService;
 import com.example.art.utils.MessageUtils;
@@ -24,7 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
+
 import java.util.List;
 
 @Service
@@ -38,7 +38,7 @@ public class DocumentServiceImpl implements DocumentService {
     private ServiceUtils serviceUtils;
 
     @Autowired
-    private DocumentsMapper documentsMapper;
+    private DocumentMapper documentsMapper;
 
     @Override
     public BaseResponse<SuccessCreateResponse> storeFile(Long dealId, MultipartFile file)
@@ -66,13 +66,14 @@ public class DocumentServiceImpl implements DocumentService {
         Deal deal = serviceUtils.getDeal(dealId);
         serviceUtils.checkUserAuthorization(deal);
 
-        List<AttachmentDetails> attachmentDetailsList = documentRepository.findAllByDealId(dealId);
-        AttachmentsResponse response = new AttachmentsResponse(attachmentDetailsList);
+        List<DocumentView> documents = documentRepository.findAllByDealId(dealId);
+
+        AttachmentsResponse response = documentsMapper.createAttachmentsResponse(documents);
 
         return BaseResponse.<AttachmentsResponse>builder()
                 .status(HttpStatus.OK)
                 .data(response)
-                .responseMsg(MessageUtils.successGetMessage("Documents",attachmentDetailsList.size()))
+                .responseMsg(MessageUtils.successGetMessage("Documents", response.getTotalCount()))
                 .build();
 
     }

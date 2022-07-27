@@ -2,22 +2,16 @@ package com.example.art.controllers;
 
 import com.example.art.dto.response.AttachmentsResponse;
 import com.example.art.dto.response.BaseResponse;
-import com.example.art.dto.response.DropdownKeysResponse;
 import com.example.art.dto.response.SuccessCreateResponse;
 import com.example.art.exceptions.DocumentStorageException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.services.DocumentService;
-import com.example.art.utils.MessageUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/ext/{dealId}/docs")
