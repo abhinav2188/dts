@@ -13,4 +13,8 @@ public class JsonUtils {
         return objectMapper.writeValueAsString(object);
     }
 
+    private static <T> T covertObjectFromJsonString(String json, Class<T> clazz){
+        return objectMapper.convertValue(json,clazz);
+    }
+
 }

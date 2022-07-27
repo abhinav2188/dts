@@ -15,9 +15,11 @@ public class MessageUtils {
     }
 
     public static String successPostMessage(String entity) {
-        return "Successfully created "+entity;
+        return "Successfully saved "+entity;
     }
-
+    public static String successPostMessage(String entity, int count) {
+        return "Successfully saved "+count+" "+entity;
+    }
     public static String successGetMessage(String entity, int count){
         return "Successfully fetched " + count + " " + entity + " from database";
     }
@@ -30,7 +32,11 @@ public class MessageUtils {
         return "Successfully updated "+entity;
     }
 
-    public static String failureFileStorage(String fileName) {
-        return "Failure uploading file '"+ fileName+ "'";
+    public static String failureFileStorage() {
+        return "Failure uploading file";
+    }
+
+    public static String infoFileStorage(int staged, int saved) {
+        return "Saved in database " + saved + " out of " + staged + " files";
     }
 }

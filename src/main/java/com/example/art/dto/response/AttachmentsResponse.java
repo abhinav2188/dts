@@ -1,14 +1,15 @@
 package com.example.art.dto.response;
 
 import com.example.art.dto.response.inner.AttachmentDetails;
-import com.example.art.dto.response.inner.DropdownKeyDetails;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class DropdownKeysResponse {
+@AllArgsConstructor
+public class AttachmentsResponse {
 
-    private List<DropdownKeyDetails> keys;
+    private List<AttachmentDetails> info;
 
 }

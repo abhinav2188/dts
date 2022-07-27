@@ -116,11 +116,15 @@ public class Deal extends Timestamps {
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Contact> contacts;
 
+    @JsonIgnore
+    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "deal")
+    @LazyCollection(LazyCollectionOption.TRUE)
+    private List<Document> attachments;
+
     public void removeUser(User user) {
         this.getCoOwners().remove(user);
     }
 
     // todo : brochures
-    // todo : attachments
 
 }

@@ -4,10 +4,7 @@ import com.example.art.model.abstracts.Timestamps;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -24,5 +21,9 @@ public class Document extends Timestamps {
 
     @Lob
     private byte[] data;
+
+    @ManyToOne
+    @JoinColumn
+    private Deal deal;
 
 }
