@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Service
 @Slf4j
 public class DropdownServiceImpl implements DropdownService {
@@ -32,6 +33,9 @@ public class DropdownServiceImpl implements DropdownService {
 
     @Autowired
     private DropdownHelper dropdownHelper;
+
+    @Autowired
+    private DerivedDropdownService derivedDropdownService;
 
     @Override
     public BaseResponse addDropdownValue(DropdownValueRequest dto) {
@@ -159,6 +163,11 @@ public class DropdownServiceImpl implements DropdownService {
 
     private Map<String, DropdownKeyValuesDetails> getKeyValuesDetailsMap(List<DropdownType> dropdownTypes){
 
+        // returns the values of all the dropdowns from database
+
+        // we return all direct dropdown values if dropdownTypes is null
+        // direct means fetched from DropdownValue table
+
         List<DropdownValue> dropdownValues;
         if(dropdownTypes == null){
             dropdownValues = dropdownRepository.findAll();
@@ -182,6 +191,16 @@ public class DropdownServiceImpl implements DropdownService {
             details.setFormName(entry.getKey().getFormType().name());
             details.setValues(entry.getValue());
             keyValuesMap.put(entry.getKey().name(), details);
+        }
+
+        // for all the dropdown types derived from other tables in the database
+        // we don't return derived values if dropdownTypes is null
+        for(DropdownType dropdownType : dropdownTypes){
+            if(dropdownType.isDerived()){
+                DropdownKeyValuesDetails details = derivedDropdownService.getDerivedDropdownDetails(dropdownType);
+                if(details != null)
+                    keyValuesMap.put(dropdownType.name(), details);
+            }
         }
 
         return keyValuesMap;
