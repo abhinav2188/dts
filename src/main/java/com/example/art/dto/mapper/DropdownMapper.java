@@ -3,6 +3,7 @@ package com.example.art.dto.mapper;
 import com.example.art.dto.response.inner.DropdownKeyValuesDetails;
 import com.example.art.dto.response.inner.DropdownValueDetails;
 import com.example.art.model.enums.DropdownType;
+import com.example.art.model.views.BrochureDropdownView;
 import com.example.art.model.views.ContactDropdownView;
 import com.example.art.model.views.PartyDropdownView;
 import com.example.art.model.views.UserHandlerDropdownView;
@@ -65,6 +66,24 @@ public class DropdownMapper {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(view.getName());
         details.setId(view.getId());
+        return details;
+    }
+
+    public DropdownKeyValuesDetails getBrochureDropdownKeyValuesDetails(DropdownType dropdownType, List<BrochureDropdownView> viewList) {
+        DropdownKeyValuesDetails details = new DropdownKeyValuesDetails();
+        details.setDropdownKey(dropdownType.name());
+        details.setFormName(dropdownType.getFormType().name());
+        List<DropdownValueDetails> valueDetails = viewList.stream()
+                .map(this::getDropdownValueDetails)
+                .collect(Collectors.toList());
+        details.setValues(valueDetails);
+        return details;
+    }
+
+    private DropdownValueDetails getDropdownValueDetails(BrochureDropdownView brochureDropdownView) {
+        DropdownValueDetails details = new DropdownValueDetails();
+        details.setValue(brochureDropdownView.getBrochureName());
+        details.setId(brochureDropdownView.getId());
         return details;
     }
 

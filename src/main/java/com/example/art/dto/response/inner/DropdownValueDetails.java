@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DropdownValueDetails {
 
-    private Long id;
+    private Object id;
 
     private String value;
 

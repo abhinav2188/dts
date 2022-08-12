@@ -3,6 +3,7 @@ package com.example.art.services.impl;
 import com.example.art.dto.mapper.DropdownMapper;
 import com.example.art.dto.response.inner.DropdownKeyValuesDetails;
 import com.example.art.model.enums.DropdownType;
+import com.example.art.model.views.BrochureDropdownView;
 import com.example.art.model.views.ContactDropdownView;
 import com.example.art.model.views.PartyDropdownView;
 import com.example.art.model.views.UserHandlerDropdownView;
@@ -41,6 +42,9 @@ public class DerivedDropdownService {
     private ConsultantRepository consultantRepository;
 
     @Autowired
+    private BrochureRepository brochureRepository;
+
+    @Autowired
     private DropdownMapper dropdownMapper;
 
     private Map<DropdownType, GetDerivedDropdownValue> map;
@@ -52,13 +56,21 @@ public class DerivedDropdownService {
         map.put(DropdownType.MEETING_HANDLER, getHandlerEmails);
         map.put(DropdownType.MEETING_CONSULTANT, getConsultantNames);
         map.put(DropdownType.MEETING_CONTACT, getContactNames);
+        map.put(DropdownType.BROCHURES_TYPE, getBrochuresNames);
     }
+
 
     public DropdownKeyValuesDetails getDerivedDropdownDetails(DropdownType dropdownType){
         if(!map.containsKey(dropdownType))
             return new DropdownKeyValuesDetails(dropdownType.name(),dropdownType.getFormType().name(), new ArrayList<>());
         return map.get(dropdownType).getDetails(dropdownType);
     }
+
+    private GetDerivedDropdownValue getBrochuresNames = (dropdownType) -> {
+        List<BrochureDropdownView> viewList = brochureRepository.findByIsActiveTrueOrderByUpdateTimestampDesc();
+        return dropdownMapper.getBrochureDropdownKeyValuesDetails(dropdownType,viewList);
+    };
+
 
     private GetDerivedDropdownValue getPartyNames = (dropdownType) -> {
         List<PartyDropdownView> viewList = partyRepository.findByIsActiveTrueOrderByCreateTimestampDesc();
