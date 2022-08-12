@@ -9,16 +9,19 @@ import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Brochure;
 import com.example.art.repository.BrochureRepository;
 import com.example.art.services.BrochureService;
+import com.example.art.services.FileStorageService;
 import com.example.art.utils.MessageUtils;
 import com.example.art.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,6 +46,11 @@ public class BrochureServiceImpl implements BrochureService {
     @Autowired
     private BrochureMapper brochureMapper;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    private final String UPLOAD_PATH = "brochures/";
+
     @Override
     public BaseResponse<BrochureResponse> addBrochure(MultipartFile file, String brochureName)
             throws DocumentStorageException, NoAuthorizationException {
@@ -50,20 +58,23 @@ public class BrochureServiceImpl implements BrochureService {
         if(!serviceUtils.isUserAdmin()) throw new NoAuthorizationException("Brochure");
 
         try{
-            // generate custom file name
+//            // generate custom file name
             String fname = getBrochureName(file.getOriginalFilename(), brochureName);
+//
+//            // create or replace file
+//            Files.copy(file.getInputStream(), getBrochuresPath(fname), StandardCopyOption.REPLACE_EXISTING);
+//
+//            // upload path
+//            String uploadPath = ServletUriComponentsBuilder
+//                    .fromCurrentContextPath()
+//                    .path(UPLOAD_PATH).path(fname)
+//                    .toUriString();
 
-            // create or replace file
-            Files.copy(file.getInputStream(), getBrochuresPath(fname), StandardCopyOption.REPLACE_EXISTING);
-
-            // upload path
-            String uploadPath = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/Brochures/").path(fname)
-                    .toUriString();
+            String fileCode = fileStorageService.saveFile(fname,file);
+            String downloadUri = "api/download/"+fileCode;
 
             // updating database brochure table
-            Brochure saved = updateBrochureEntity(brochureName, uploadPath);
+            Brochure saved = updateBrochureEntity(brochureName, downloadUri);
 
             // return response
             return BaseResponse.<BrochureResponse>builder()
@@ -107,7 +118,7 @@ public class BrochureServiceImpl implements BrochureService {
     }
 
     private Path getBrochuresPath(String brochureName) throws IOException {
-        String path = new ClassPathResource("Brochures/").getFile().getAbsolutePath() +
+        String path = new ClassPathResource(UPLOAD_PATH).getFile().getAbsolutePath() +
                 File.separator + brochureName;
         log.info("file path = {}",path);
         return Paths.get(path);
