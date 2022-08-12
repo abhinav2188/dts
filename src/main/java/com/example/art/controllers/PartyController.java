@@ -18,7 +18,7 @@ public class PartyController {
     private PartyService partyService;
 
     @PostMapping
-    public BaseResponse addParty(@RequestBody CreatePartyRequest createPartyRequest){
+    public BaseResponse<PartyResponse> addParty(@RequestBody CreatePartyRequest createPartyRequest){
         return partyService.addNewParty(createPartyRequest);
     }
 

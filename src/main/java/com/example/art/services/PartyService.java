@@ -13,7 +13,7 @@ public interface PartyService {
 
     BaseResponse<PartyResponse> getPartyDetails(Long id) throws EntityNotFoundException;
 
-    BaseResponse updateDetails(Long id, UpdatePartyRequest updatePartyRequest) throws EntityNotFoundException;
+    BaseResponse<PartyResponse> updateDetails(Long id, UpdatePartyRequest updatePartyRequest) throws EntityNotFoundException;
 
     BaseResponse<PartiesDetailResponse> getAllParties(Integer pageNo, Integer pageCount);
 }

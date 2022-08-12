@@ -1,12 +1,11 @@
 package com.example.art.dto.request;
 
-import com.example.art.model.enums.DealStage;
 import lombok.Data;
 
 @Data
 public class UpdateDealSection4Request {
 
-    private DealStage dealStage;
+    private String dealStage;
 
     private Boolean isActive;
 

@@ -5,6 +5,7 @@ import com.example.art.dto.request.DropdownValueRequest;
 import com.example.art.dto.response.*;
 import com.example.art.dto.response.inner.DropdownKeyValuesDetails;
 import com.example.art.dto.response.inner.DropdownValueDetails;
+import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.MissingUserRequestParamException;
 import com.example.art.helper.DropdownHelper;
 import com.example.art.model.DropdownValue;
@@ -18,6 +19,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +40,11 @@ public class DropdownServiceImpl implements DropdownService {
     private DerivedDropdownService derivedDropdownService;
 
     @Override
-    public BaseResponse addDropdownValue(DropdownValueRequest dto) {
+    public BaseResponse addDropdownValue(DropdownValueRequest dto) throws EntityNotFoundException {
 
         DropdownType dropdownType = dropdownHelper.getDropdownType(dto.getKey());
         if(dropdownType == null){
-            return BaseResponse.builder()
-                    .responseMsg("dropdown type not present")
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
+            throw new EntityNotFoundException("Dropdown","dropdownType",dto.getKey());
         }
 
         DropdownValue entity = getDropdownValueEntity(dto, dropdownType);
@@ -170,12 +169,13 @@ public class DropdownServiceImpl implements DropdownService {
 
         List<DropdownValue> dropdownValues;
         if(dropdownTypes == null){
-            dropdownValues = dropdownRepository.findAll();
+            dropdownValues = dropdownRepository.findByOrderByValueOrderAsc();
         }
         else{
-            dropdownValues = dropdownRepository.findByDropdownTypeIn(dropdownTypes);
+            dropdownValues = dropdownRepository.findByDropdownTypeInOrderByValueOrderAsc(dropdownTypes);
         }
 
+        log.info("dropdown values : {}",dropdownValues);
         Map<DropdownType, List<DropdownValueDetails>> map1 =
         dropdownValues.stream().collect(
                 Collectors.groupingBy(
@@ -185,21 +185,17 @@ public class DropdownServiceImpl implements DropdownService {
 
         Map<String, DropdownKeyValuesDetails> keyValuesMap = new HashMap<>();
 
-        for(Map.Entry<DropdownType, List<DropdownValueDetails>> entry : map1.entrySet()){
-            DropdownKeyValuesDetails details = new DropdownKeyValuesDetails();
-                   details.setDropdownKey(entry.getKey().name());
-            details.setFormName(entry.getKey().getFormType().name());
-            details.setValues(entry.getValue());
-            keyValuesMap.put(entry.getKey().name(), details);
-        }
-
-        // for all the dropdown types derived from other tables in the database
-        // we don't return derived values if dropdownTypes is null
         for(DropdownType dropdownType : dropdownTypes){
             if(dropdownType.isDerived()){
                 DropdownKeyValuesDetails details = derivedDropdownService.getDerivedDropdownDetails(dropdownType);
-                if(details != null)
-                    keyValuesMap.put(dropdownType.name(), details);
+                keyValuesMap.put(dropdownType.name(), details);
+            }
+            else{
+                DropdownKeyValuesDetails details = new DropdownKeyValuesDetails();
+                details.setDropdownKey(dropdownType.name());
+                details.setFormName(dropdownType.getFormType().name());
+                details.setValues(map1.getOrDefault(dropdownType,new ArrayList<>()));
+                keyValuesMap.put(dropdownType.name(),details);
             }
         }
 
@@ -215,7 +211,7 @@ public class DropdownServiceImpl implements DropdownService {
         dropdownKeyValuesDetails.setDropdownKey(dropdownType.name());
         dropdownKeyValuesDetails.setFormName(dropdownType.getFormType().name());
 
-        List<DropdownValueDetails> dropdownValueDetails = dropdownRepository.findAllByDropdownType(dropdownType);
+        List<DropdownValueDetails> dropdownValueDetails = dropdownRepository.findByDropdownTypeOrderByValueOrderAsc(dropdownType);
 //        if(dropdownValueDetails.size() == 0) return null;
 
         dropdownKeyValuesDetails.setValues(dropdownValueDetails);

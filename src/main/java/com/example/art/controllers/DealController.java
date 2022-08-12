@@ -8,6 +8,7 @@ import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
 import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
+import com.example.art.dto.response.inner.DealCardDetails;
 import com.example.art.exceptions.DuplicateEntryException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.InvalidFieldException;
@@ -24,9 +25,15 @@ public class DealController {
     private DealService dealService;
 
     @PostMapping
-    public BaseResponse<CreateDealResponse> createDeal(@RequestBody CreateDealRequest requestDto)
+    public BaseResponse<DealCardDetails> createDeal(@RequestBody CreateDealRequest requestDto)
             throws InvalidFieldException, DuplicateEntryException {
         return dealService.createDeal(requestDto);
+    }
+
+    @GetMapping("/all")
+    public BaseResponse<MultipleDealsResponse> getMultipleDeals(@RequestParam(name = "pageNo") int pageNo,
+                                                                @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
+        return dealService.getMultipleDeals(pageNo,pageSize);
     }
 
     @PatchMapping("/{dealId}/s2")
@@ -41,12 +48,6 @@ public class DealController {
                                           @RequestBody UpdateDealSection3Request requestDto)
             throws NoAuthorizationException, EntityNotFoundException {
         return dealService.updateDealSection3(dealId, requestDto);
-    }
-
-    @GetMapping("/all")
-    public BaseResponse<MultipleDealsResponse> getMultipleDeals(@RequestParam(name = "pageNo") int pageNo,
-                                                                @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
-        return dealService.getMultipleDeals(pageNo,pageSize);
     }
 
     @GetMapping("/{dealId}")

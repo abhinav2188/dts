@@ -6,14 +6,13 @@ import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
 import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
-import com.example.art.exceptions.DuplicateEntryException;
-import com.example.art.exceptions.EntityNotFoundException;
-import com.example.art.exceptions.InvalidFieldException;
-import com.example.art.exceptions.NoAuthorizationException;
+import com.example.art.dto.response.inner.DealCardDetails;
+import com.example.art.dto.response.inner.DealUserDetails;
+import com.example.art.exceptions.*;
 
 public interface DealService {
 
-    BaseResponse<CreateDealResponse> createDeal(CreateDealRequest requestDto) throws InvalidFieldException, DuplicateEntryException;
+    BaseResponse<DealCardDetails> createDeal(CreateDealRequest requestDto) throws InvalidFieldException, DuplicateEntryException;
 
     BaseResponse updateProductDetails(Long dealId, UpdateProductDetailsRequest requestDto) throws EntityNotFoundException, NoAuthorizationException;
 
@@ -28,4 +27,8 @@ public interface DealService {
     BaseResponse<DealDetailResponse> getDealDetails(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException;
 
     BaseResponse<DealDetailResponse2> getDealDetails2(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException;
+
+    BaseResponse<DealUserDetails> addDealOwner(Long dealId, String userEmail) throws EntityNotFoundException, NoAuthorizationException, InvalidOperationException;
+
+    BaseResponse<DealUserDetails> removeDealOwner(Long dealId, String userEmail) throws NoAuthorizationException, EntityNotFoundException, InvalidOperationException;
 }

@@ -29,6 +29,16 @@ public class CommonControllerAdvice {
                 .build();
     }
 
+    @ExceptionHandler({InvalidOperationException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public BaseResponse handleException(InvalidOperationException ex){
+        return BaseResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .responseMsg(ex.getMessage())
+                .responseCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .build();
+    }
+
     @ExceptionHandler({InvalidFieldException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public BaseResponse handleException(InvalidFieldException ex){

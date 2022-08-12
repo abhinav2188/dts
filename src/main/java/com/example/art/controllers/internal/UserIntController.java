@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/int/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserIntController {
 
     @Autowired
@@ -23,7 +24,7 @@ public class UserIntController {
         return userService.getAllUsers(pageNo, pageSize);
     }
 
-    @PatchMapping("/auth/{id}")
+    @PatchMapping("/{id}/auth")
     public BaseResponse updateUserAuthorization(@PathVariable Long id,
                                                 @RequestBody UpdateUserAuthorizationRequest requestBody)
             throws UserNotFoundException {

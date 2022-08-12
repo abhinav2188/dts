@@ -1,15 +1,14 @@
 package com.example.art.dto.response;
 
-import com.example.art.dto.response.inner.DealAdditionalDetails;
-import com.example.art.dto.response.inner.DealAuthorizationDetails;
-import com.example.art.dto.response.inner.DealCommonDetails;
-import com.example.art.dto.response.inner.DealProductDetails;
+import com.example.art.dto.response.inner.*;
 import lombok.Data;
 
 @Data
 public class DealDetailResponse {
 
     // for backend
+
+    private DealCardDetails cardDetails;
 
     private DealProductDetails productDetails;
 

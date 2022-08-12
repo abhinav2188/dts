@@ -1,9 +1,7 @@
 package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
-import com.example.art.model.enums.DealStage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.LazyCollection;
@@ -75,8 +73,7 @@ public class Deal extends Timestamps {
 
     // additional details - section 4
 
-    @Enumerated(EnumType.STRING)
-    private DealStage dealStage;
+    private String dealStage;
 
     private Boolean isActive;
 

@@ -1,6 +1,5 @@
 package com.example.art.dto.response.inner;
 
-import com.example.art.model.enums.DealStage;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,7 +13,7 @@ public class InteractionDetails {
 
     private Date meetingDate;
 
-    private DealStage dealStage;
+    private String dealStage;
 
     private String meetingLocation;
 

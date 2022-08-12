@@ -1,11 +1,7 @@
 package com.example.art.dto.response.inner;
 
-import com.example.art.model.enums.DealStage;
-import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Data
@@ -23,7 +19,7 @@ public class DealCardDetails {
 
     private Long partyId;
 
-    private DealStage dealStage;
+    private String dealStage;
 
     private Date openingDate;
 

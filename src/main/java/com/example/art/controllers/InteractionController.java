@@ -4,6 +4,7 @@ import com.example.art.dto.request.CreateInteractionRequest;
 import com.example.art.dto.request.UpdateInteractionRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.InteractionsResponse;
+import com.example.art.dto.response.inner.InteractionDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.services.InteractionService;
@@ -20,8 +21,8 @@ public class InteractionController {
     private InteractionService interactionService;
 
     @PostMapping("/{dealId}")
-    public BaseResponse addDealInteraction(@PathVariable Long dealId,
-                                       @Valid @RequestBody CreateInteractionRequest request)
+    public BaseResponse<InteractionDetails> addDealInteraction(@PathVariable Long dealId,
+                                                               @Valid @RequestBody CreateInteractionRequest request)
             throws NoAuthorizationException, EntityNotFoundException {
         return interactionService.addInteraction(dealId,request);
     }

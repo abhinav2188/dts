@@ -24,6 +24,7 @@ public class DropdownHelper {
     private void listDropdownKeys(){
         dropdownKeyDetailsList = new ArrayList<>();
         for(DropdownType dropdownType : DropdownType.values()){
+            if(!dropdownType.isDerived())
             dropdownKeyDetailsList.add(
                     new DropdownKeyDetails(dropdownType.name(), dropdownType.getFormType().name(), dropdownType.isStatic()));
         }

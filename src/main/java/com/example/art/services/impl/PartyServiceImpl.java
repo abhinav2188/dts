@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -34,16 +35,18 @@ public class PartyServiceImpl implements PartyService {
     private PartyMapper partyMapper;
 
     @Override
-    public BaseResponse addNewParty(CreatePartyRequest requestDto) {
+    public BaseResponse<PartyResponse> addNewParty(CreatePartyRequest requestDto) {
         Party party = partyMapper.createParty(requestDto);
         Party savedParty = partyRepository.save(party);
+        PartyResponse partyResponse = partyMapper.getPartyResponse(party);
         if(savedParty != null){
-            return BaseResponse.builder().status(HttpStatus.ACCEPTED)
+            return BaseResponse.<PartyResponse>builder().status(HttpStatus.ACCEPTED)
                     .status(HttpStatus.OK)
                     .responseMsg("Party Added Successfully")
+                    .data(partyResponse)
                     .build();
         }
-        return BaseResponse.builder()
+        return BaseResponse.<PartyResponse>builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .responseMsg("Party was not added due to some error")
                 .build();
@@ -67,24 +70,25 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public BaseResponse updateDetails(Long id, UpdatePartyRequest updatePartyRequest) throws EntityNotFoundException {
+    public BaseResponse<PartyResponse> updateDetails(Long id, UpdatePartyRequest updatePartyRequest) throws EntityNotFoundException {
         Party party = partyRepository.findById(id)
                 .orElseThrow(() ->new EntityNotFoundException("Party","id",id));
         partyMapper.update(party, updatePartyRequest);
         Party saved = partyRepository.save(party);
-        return BaseResponse.builder()
+        return BaseResponse.<PartyResponse>builder()
                 .status(HttpStatus.OK)
                 .responseCode(String.valueOf(HttpStatus.OK.value()))
                 .responseMsg("updated party details")
+                .data(partyMapper.getPartyResponse(saved))
                 .build();
     }
 
     @Override
-    public BaseResponse<PartiesDetailResponse> getAllParties(Integer pageNo, Integer pageCount) {
+    public BaseResponse<PartiesDetailResponse> getAllParties(Integer pageNo, Integer pageSize) {
 
         PartiesDetailResponse response = new PartiesDetailResponse();
 
-        Pageable pageable = PageRequest.of(pageNo,pageCount);
+        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("updateTimestamp").descending());
         Page<Party> page = partyRepository.findAll(pageable);
 
         response.setTotalCount(page.getTotalElements());

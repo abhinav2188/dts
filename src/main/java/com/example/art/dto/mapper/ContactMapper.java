@@ -35,7 +35,7 @@ public class ContactMapper {
         return response;
     }
 
-    private ContactDetails getContactDetails(Contact contact) {
+    public ContactDetails getContactDetails(Contact contact) {
         ContactDetails details = new ContactDetails();
         mapperUtils.updateResponseFromEntity(contact, details);
         return details;

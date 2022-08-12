@@ -1,14 +1,20 @@
 package com.example.art.controllers.internal;
 
 import com.example.art.dto.request.UpdateDealAuthorizationRequest;
+import com.example.art.dto.request.UpdateDealOwnerRequest;
 import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
+import com.example.art.dto.response.inner.DealUserDetails;
 import com.example.art.exceptions.EntityNotFoundException;
+import com.example.art.exceptions.InvalidOperationException;
 import com.example.art.exceptions.NoAuthorizationException;
+import com.example.art.exceptions.UserNotFoundException;
 import com.example.art.services.DealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/int/deals")
@@ -33,9 +39,23 @@ public class DealIntController {
 
     @GetMapping("/{dealId}")
     public BaseResponse<DealDetailResponse> getDealDetails(@PathVariable Long dealId,
-                                                           @RequestParam(name = "userId") Long userId)
+                                                           @RequestParam(name = "userId", required = false) Long userId)
             throws NoAuthorizationException, EntityNotFoundException {
         return dealService.getDealDetails(dealId,userId);
+    }
+
+    @PatchMapping("/{dealId}/add-auth")
+    public BaseResponse<DealUserDetails> addDealOwner(@PathVariable Long dealId,
+                                                      @Valid @RequestBody UpdateDealOwnerRequest request)
+            throws UserNotFoundException, NoAuthorizationException, EntityNotFoundException, InvalidOperationException {
+        return dealService.addDealOwner(dealId, request.getEmail());
+    }
+
+    @PatchMapping("/{dealId}/remove-auth")
+    public BaseResponse<DealUserDetails> removeDealOwner(@PathVariable Long dealId,
+                                                         @Valid @RequestBody UpdateDealOwnerRequest request)
+            throws NoAuthorizationException, EntityNotFoundException, InvalidOperationException {
+        return dealService.removeDealOwner(dealId, request.getEmail());
     }
 
 }

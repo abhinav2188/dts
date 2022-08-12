@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class DealMapper {
         deal.setIsActive(true);
         deal.setName(request.getDealName());
         deal.setCoOwners(new ArrayList<>());
+        deal.setOpeningDate(new Date());
         return deal;
     }
 
@@ -80,7 +82,7 @@ public class DealMapper {
         return response;
     }
 
-    private DealCardDetails getDealCardDetails(Deal deal) {
+    public DealCardDetails getDealCardDetails(Deal deal) {
         DealCardDetails dealCardDetails = new DealCardDetails();
         mapperUtils.updateResponseFromEntity(deal,dealCardDetails);
         dealCardDetails.setDealId(deal.getId());
@@ -92,6 +94,7 @@ public class DealMapper {
 
     public DealDetailResponse getDealDetailResponse(Deal deal, User owner, List<User> coOwners) {
         DealDetailResponse dealDetailResponse = new DealDetailResponse();
+        DealCardDetails cardDetails = getDealCardDetails(deal);
         DealProductDetails productDetails = new DealProductDetails();
         mapperUtils.updateResponseFromEntity(deal, productDetails);
         DealCommonDetails commonDetails = new DealCommonDetails();
@@ -103,6 +106,7 @@ public class DealMapper {
         List<DealUserDetails> coOwnerDetails = coOwners.stream().map(this::getDealUserDetails)
                 .collect(Collectors.toList());
         authorizationDetails.setCoOwners(coOwnerDetails);
+        dealDetailResponse.setCardDetails(cardDetails);
         dealDetailResponse.setProductDetails(productDetails);
         dealDetailResponse.setCommonDetails(commonDetails);
         dealDetailResponse.setAdditionalDetails(additionalDetails);
@@ -110,7 +114,7 @@ public class DealMapper {
         return dealDetailResponse;
      }
 
-    private DealUserDetails getDealUserDetails(User user) {
+    public DealUserDetails getDealUserDetails(User user) {
         if(user == null) return null;
         DealUserDetails details = new DealUserDetails();
         mapperUtils.updateResponseFromEntity(user, details);

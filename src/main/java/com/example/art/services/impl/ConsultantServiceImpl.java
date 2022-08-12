@@ -4,6 +4,8 @@ import com.example.art.dto.mapper.ConsultantMapper;
 import com.example.art.dto.request.CreateConsultantRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.ConsultantsResponse;
+import com.example.art.dto.response.SuccessDeleteResponse;
+import com.example.art.dto.response.inner.ConsultantDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Consultant;
@@ -38,7 +40,7 @@ public class ConsultantServiceImpl implements ConsultantService {
     private ConsultantMapper mapper;
 
     @Override
-    public BaseResponse addConsultant(Long dealId, CreateConsultantRequest request) throws EntityNotFoundException, NoAuthorizationException {
+    public BaseResponse<ConsultantDetails> addConsultant(Long dealId, CreateConsultantRequest request) throws EntityNotFoundException, NoAuthorizationException {
 
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));
@@ -51,9 +53,10 @@ public class ConsultantServiceImpl implements ConsultantService {
 
         Consultant saved = consultantRepository.save(consultant);
 
-        return BaseResponse.builder()
+        return BaseResponse.<ConsultantDetails>builder()
                 .responseMsg(MessageUtils.successPostMessage("Consultant"))
                 .status(HttpStatus.CREATED)
+                .data(mapper.getConsultantDetails(saved))
                 .build();
     }
 
@@ -80,7 +83,7 @@ public class ConsultantServiceImpl implements ConsultantService {
     }
 
     @Override
-    public BaseResponse deleteConsultant(Long consultantId) throws EntityNotFoundException, NoAuthorizationException {
+    public BaseResponse<SuccessDeleteResponse> deleteConsultant(Long consultantId) throws EntityNotFoundException, NoAuthorizationException {
 
         Consultant consultant = consultantRepository.findById(consultantId)
                 .orElseThrow( () -> new EntityNotFoundException("Consultant","id",consultantId));
@@ -91,9 +94,10 @@ public class ConsultantServiceImpl implements ConsultantService {
 
         consultantRepository.delete(consultant);
 
-        return BaseResponse.builder()
+        return BaseResponse.<SuccessDeleteResponse>builder()
                 .status(HttpStatus.OK)
                 .responseMsg(MessageUtils.successDeleteMessage("Consultant"))
+                .data(new SuccessDeleteResponse(consultantId))
                 .build();
 
     }

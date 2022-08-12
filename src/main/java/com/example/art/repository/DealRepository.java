@@ -11,4 +11,6 @@ public interface DealRepository extends JpaRepository<Deal,Long> {
 
     Page<Deal> findAllByCoOwners_Id(Long id, Pageable pageable);
 
+
+
 }

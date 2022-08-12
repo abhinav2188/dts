@@ -35,7 +35,7 @@ public class ConsultantMapper {
         return response;
     }
 
-    private ConsultantDetails getConsultantDetails(Consultant consultant) {
+    public ConsultantDetails getConsultantDetails(Consultant consultant) {
         ConsultantDetails details = new ConsultantDetails();
         mapperUtils.updateResponseFromEntity(consultant, details);
         return details;

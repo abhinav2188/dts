@@ -2,6 +2,8 @@ package com.example.art.controllers.internal;
 
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.request.DropdownValueRequest;
+import com.example.art.dto.response.DropdownKeysResponse;
+import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.services.DropdownService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +16,12 @@ public class DropdownIntController {
     private DropdownService dropdownService;
 
     @PostMapping
-    public BaseResponse addDropdownValue(@RequestBody DropdownValueRequest dto){
+    public BaseResponse addDropdownValue(@RequestBody DropdownValueRequest dto) throws EntityNotFoundException {
         return dropdownService.addDropdownValue(dto);
     }
 
     @GetMapping("/keys")
-    public BaseResponse getALlDropdownKeys(){
+    public BaseResponse<DropdownKeysResponse> getALlDropdownKeys(){
         return dropdownService.getAllDropdownKeys();
     }
 

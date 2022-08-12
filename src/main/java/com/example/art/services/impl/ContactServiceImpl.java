@@ -4,6 +4,7 @@ import com.example.art.dto.mapper.ContactMapper;
 import com.example.art.dto.request.CreateContactRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.ContactsResponse;
+import com.example.art.dto.response.inner.ContactDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Contact;
@@ -36,7 +37,7 @@ public class ContactServiceImpl implements ContactService {
     private ContactMapper mapper;
 
     @Override
-    public BaseResponse addContact(Long dealId, CreateContactRequest request) throws EntityNotFoundException, NoAuthorizationException {
+    public BaseResponse<ContactDetails> addContact(Long dealId, CreateContactRequest request) throws EntityNotFoundException, NoAuthorizationException {
 
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));
@@ -49,8 +50,9 @@ public class ContactServiceImpl implements ContactService {
 
         Contact saved = contactRepository.save(contact);
 
-        return BaseResponse.builder()
+        return BaseResponse.<ContactDetails>builder()
                 .responseMsg(MessageUtils.successPostMessage("Contact"))
+                .data(mapper.getContactDetails(saved))
                 .status(HttpStatus.CREATED)
                 .build();
     }

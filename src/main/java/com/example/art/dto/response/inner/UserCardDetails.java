@@ -14,7 +14,7 @@ public class UserCardDetails {
 
     private String designation;
 
-    private boolean isActive;
+    private Boolean isActive;
 
     private String roles;
 

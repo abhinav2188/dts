@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,8 @@ public class DerivedDropdownService {
     }
 
     public DropdownKeyValuesDetails getDerivedDropdownDetails(DropdownType dropdownType){
-        if(!map.containsKey(dropdownType)) return null;
+        if(!map.containsKey(dropdownType))
+            return new DropdownKeyValuesDetails(dropdownType.name(),dropdownType.getFormType().name(), new ArrayList<>());
         return map.get(dropdownType).getDetails(dropdownType);
     }
 

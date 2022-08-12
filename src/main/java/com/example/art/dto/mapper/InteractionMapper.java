@@ -37,7 +37,7 @@ public class InteractionMapper {
         return response;
     }
 
-    private InteractionDetails getInteractionDetails(Interaction interaction) {
+    public InteractionDetails getInteractionDetails(Interaction interaction) {
         InteractionDetails details = new InteractionDetails();
         mapperUtils.updateResponseFromEntity(interaction, details);
         return details;

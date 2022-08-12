@@ -1,12 +1,10 @@
 package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
-import com.example.art.model.enums.DealStage;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -19,8 +17,7 @@ public class Interaction extends Timestamps {
     @Temporal(TemporalType.TIMESTAMP)
     private Date meetingDate;
 
-    @Enumerated(EnumType.STRING)
-    private DealStage dealStage;
+    private String dealStage;
 
     private String meetingLocation;
 

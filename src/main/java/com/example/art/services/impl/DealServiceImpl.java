@@ -1,16 +1,14 @@
 package com.example.art.services.impl;
 
-import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.mapper.DealMapper;
 import com.example.art.dto.request.*;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
 import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
-import com.example.art.exceptions.DuplicateEntryException;
-import com.example.art.exceptions.EntityNotFoundException;
-import com.example.art.exceptions.InvalidFieldException;
-import com.example.art.exceptions.NoAuthorizationException;
+import com.example.art.dto.response.inner.DealCardDetails;
+import com.example.art.dto.response.inner.DealUserDetails;
+import com.example.art.exceptions.*;
 import com.example.art.model.Deal;
 import com.example.art.model.Party;
 import com.example.art.model.User;
@@ -57,16 +55,17 @@ public class DealServiceImpl implements DealService {
     private StringUtils stringUtils;
 
     @Override
-    public BaseResponse<CreateDealResponse> createDeal(CreateDealRequest requestDto)
+    public BaseResponse<DealCardDetails> createDeal(CreateDealRequest requestDto)
             throws InvalidFieldException, DuplicateEntryException {
 
         validateCreateDealRequest(requestDto);
 
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
+        Long userId = Long.valueOf(MDC.get(Constants.USER_ID));
+        User user = userRepository.findById(userId).orElseThrow(
                 ()-> new InvalidFieldException("userId"));
 
-        Party party = partyRepository.findById(requestDto.getPartyId()).orElseThrow(
-                ()-> new InvalidFieldException("partyId"));
+        Party party = partyRepository.findByPartyName(requestDto.getPartyName()).orElseThrow(
+                ()-> new InvalidFieldException("partyName"));
 
         Deal deal = dealMapper.getDeal(requestDto);
 
@@ -78,10 +77,10 @@ public class DealServiceImpl implements DealService {
         log.info("new deal created with name {}, with party {}, by user {}",
                 deal.getName(), party.getPartyName(), user.getEmail());
 
-        return BaseResponse.<CreateDealResponse>builder()
+        return BaseResponse.<DealCardDetails>builder()
                 .responseMsg("deal created")
                 .status(HttpStatus.CREATED)
-                .data(dealMapper.getCreateDealResponse(saved))
+                .data(dealMapper.getDealCardDetails(saved))
                 .build();
     }
 
@@ -96,7 +95,7 @@ public class DealServiceImpl implements DealService {
 
         int updateCount = dealMapper.updateProductDetails(deal,requestDto);
 
-        dealRepository.save(deal);
+        Deal deal1 = dealRepository.save(deal);
 
         String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
         return BaseResponse.builder()
@@ -245,8 +244,8 @@ public class DealServiceImpl implements DealService {
                 () -> new EntityNotFoundException("Deal","id",dealId));
 
         if(!isUserAdmin()){
-            if(!getCurrentUserId().equals(userId))
-                throw new NoAuthorizationException(MessageUtils.noAuthorization("Deal"));
+//            if(!getCurrentUserId().equals(userId))
+//                throw new NoAuthorizationException(MessageUtils.noAuthorization("Deal"));
             validateUserAuthorization(deal);
         }
 
@@ -276,6 +275,67 @@ public class DealServiceImpl implements DealService {
                 .responseMsg(MessageUtils.successGetMessage("Deal"))
                 .data(response)
                 .build();
+    }
+
+    @Override
+    public BaseResponse<DealUserDetails> addDealOwner(Long dealId, String userEmail) throws EntityNotFoundException, NoAuthorizationException, InvalidOperationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        if(!isUserAdmin()){
+            validateUserAuthorization(deal);
+        }
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow( () -> new EntityNotFoundException("User","email",userEmail));
+
+        if(userRepository.existsByCoOwnedDeals_Id(dealId)){
+            throw new InvalidOperationException("user already a co-owner");
+        }
+
+        user.addDeal(deal);
+
+        dealRepository.save(deal);
+
+        return BaseResponse.<DealUserDetails>builder()
+                .status(HttpStatus.OK)
+                .responseMsg("added "+userEmail +" as a deal owner")
+                .data(dealMapper.getDealUserDetails(user))
+                .build();
+
+    }
+
+    @Override
+    public BaseResponse<DealUserDetails> removeDealOwner(Long dealId, String userEmail) throws NoAuthorizationException, EntityNotFoundException, InvalidOperationException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        if(!isUserAdmin()){
+            validateUserAuthorization(deal);
+        }
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow( () -> new EntityNotFoundException("User","email",userEmail));
+
+        if(!userRepository.existsByCoOwnedDeals_Id(dealId)){
+            throw new InvalidOperationException("User not a co-owner to be removed");
+        }
+        if(getCurrentUserId().equals(user.getId())){
+            throw new InvalidOperationException("User can't remove itself from deal owners list");
+        }
+
+        deal.removeUser(user);
+
+        dealRepository.save(deal);
+
+        return BaseResponse.<DealUserDetails>builder()
+                .status(HttpStatus.OK)
+                .responseMsg("removed "+userEmail +" from the deal owners")
+                .data(dealMapper.getDealUserDetails(user))
+                .build();
+
     }
 
 

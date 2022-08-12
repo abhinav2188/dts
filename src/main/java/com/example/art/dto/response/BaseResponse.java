@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 @ToString
 public class BaseResponse<T> {
 
-    private HttpStatus status;
+    private String status;
+
+    private int statusCode;
 
     private String responseMsg;
 
@@ -18,4 +20,18 @@ public class BaseResponse<T> {
 
     private T data;
 
+    public static class BaseResponseBuilder<T> {
+
+        private String status;
+        private int statusCode;
+
+        public BaseResponseBuilder<T> status(HttpStatus httpStatus){
+            this.status = httpStatus.is2xxSuccessful() ? "SUCCESS" : "FAILURE";
+            this.statusCode = httpStatus.value();
+            return this;
+        }
+
+    }
+
 }
+

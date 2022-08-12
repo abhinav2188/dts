@@ -5,12 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class CreateDealRequest {
-
+public class UpdateDealOwnerRequest {
     @NotEmpty
-    private String partyName;
-
-    @NotEmpty
-    private String dealName;
-
+    private String email;
 }

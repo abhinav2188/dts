@@ -19,4 +19,6 @@ public class PartyResponse {
 
     private String email;
 
+    private Boolean isActive;
+
 }

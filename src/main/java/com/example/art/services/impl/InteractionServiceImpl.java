@@ -5,6 +5,7 @@ import com.example.art.dto.request.CreateInteractionRequest;
 import com.example.art.dto.request.UpdateInteractionRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.InteractionsResponse;
+import com.example.art.dto.response.inner.InteractionDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Interaction;
@@ -37,7 +38,7 @@ public class InteractionServiceImpl implements InteractionService {
     private InteractionMapper mapper;
 
     @Override
-    public BaseResponse addInteraction(Long dealId, CreateInteractionRequest request) throws EntityNotFoundException, NoAuthorizationException {
+    public BaseResponse<InteractionDetails> addInteraction(Long dealId, CreateInteractionRequest request) throws EntityNotFoundException, NoAuthorizationException {
 
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));
@@ -51,9 +52,10 @@ public class InteractionServiceImpl implements InteractionService {
 
         Interaction saved = interactionRepository.save(interaction);
 
-        return BaseResponse.builder()
+        return BaseResponse.<InteractionDetails>builder()
                 .responseMsg(MessageUtils.successPostMessage("Interaction"))
                 .status(HttpStatus.CREATED)
+                .data(mapper.getInteractionDetails(saved))
                 .build();
     }
 

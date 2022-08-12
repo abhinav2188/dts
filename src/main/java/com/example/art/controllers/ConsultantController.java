@@ -3,6 +3,8 @@ package com.example.art.controllers;
 import com.example.art.dto.request.CreateConsultantRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.ConsultantsResponse;
+import com.example.art.dto.response.SuccessDeleteResponse;
+import com.example.art.dto.response.inner.ConsultantDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.services.ConsultantService;
@@ -19,8 +21,8 @@ public class ConsultantController {
     private ConsultantService consultantService;
 
     @PostMapping("/{dealId}")
-    public BaseResponse addDealConsultant(@PathVariable Long dealId,
-                                       @Valid @RequestBody CreateConsultantRequest request)
+    public BaseResponse<ConsultantDetails> addDealConsultant(@PathVariable Long dealId,
+                                                             @Valid @RequestBody CreateConsultantRequest request)
             throws NoAuthorizationException, EntityNotFoundException {
         return consultantService.addConsultant(dealId,request);
     }
@@ -34,7 +36,7 @@ public class ConsultantController {
     }
 
     @DeleteMapping("/{consultantId}")
-    public BaseResponse deleteConsultant(@PathVariable Long consultantId)
+    public BaseResponse<SuccessDeleteResponse> deleteConsultant(@PathVariable Long consultantId)
             throws NoAuthorizationException, EntityNotFoundException {
         return consultantService.deleteConsultant(consultantId);
     }

@@ -50,6 +50,8 @@ public class AuthServiceImpl implements AuthService {
 
         LoginResponse response = new LoginResponse();
         response.setToken(token);
+        response.setEmail(userDetails.getUsername());
+        response.setRole(String.valueOf(userDetails.getAuthorities()));
 
         return BaseResponse.<LoginResponse>builder()
                 .status(HttpStatus.OK)
