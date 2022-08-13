@@ -64,17 +64,17 @@ public class BrochureServiceImpl implements BrochureService {
 //            // create or replace file
 //            Files.copy(file.getInputStream(), getBrochuresPath(fname), StandardCopyOption.REPLACE_EXISTING);
 //
-//            // upload path
-//            String uploadPath = ServletUriComponentsBuilder
-//                    .fromCurrentContextPath()
-//                    .path(UPLOAD_PATH).path(fname)
-//                    .toUriString();
+            // upload path
+            String uploadPath = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("api/download/").path(fname)
+                    .toUriString();
 
             String fileCode = fileStorageService.saveFile(fname,file);
             String downloadUri = "api/download/"+fileCode;
 
             // updating database brochure table
-            Brochure saved = updateBrochureEntity(brochureName, downloadUri);
+            Brochure saved = updateBrochureEntity(brochureName, uploadPath);
 
             // return response
             return BaseResponse.<BrochureResponse>builder()
