@@ -12,6 +12,7 @@ public enum DropdownType {
     PARTY(FormType.PARTY_DEAL, false, true),
 
     BROCHURES_TYPE(FormType.BROCHURES_QUERY, false, true),
+    DEAL_RECIPIENTS(FormType.BROCHURES_QUERY, false, true),
 
     PRODUCT_TYPE(FormType.DEAL_PRODUCT_REQUIREMENTS, false, false),
     SUB_CATEGORY_PRODUCT(FormType.DEAL_PRODUCT_REQUIREMENTS, false, false),

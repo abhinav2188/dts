@@ -3,11 +3,12 @@ package com.example.art.model.views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
 @AllArgsConstructor
-public class ContactDropdownView {
+@Data
+public class BrochureUrlView {
 
-    private Long id;
-    private String email;
+    private String brochureName;
+
+    private String filePath;
 
 }

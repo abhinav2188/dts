@@ -57,6 +57,7 @@ public class DerivedDropdownService {
         map.put(DropdownType.MEETING_CONSULTANT, getConsultantNames);
         map.put(DropdownType.MEETING_CONTACT, getContactNames);
         map.put(DropdownType.BROCHURES_TYPE, getBrochuresNames);
+        map.put(DropdownType.DEAL_RECIPIENTS, getRecipients);
     }
 
 
@@ -65,6 +66,21 @@ public class DerivedDropdownService {
             return new DropdownKeyValuesDetails(dropdownType.name(),dropdownType.getFormType().name(), new ArrayList<>());
         return map.get(dropdownType).getDetails(dropdownType);
     }
+
+    private GetDerivedDropdownValue getRecipients = (dropdownType) -> {
+        // returning contacts and consultants emails of a deal
+        Long dealId;
+        try {
+            dealId = Long.parseLong(MDC.get(Constants.DEAL_ID));
+        }catch (Exception e){
+            log.error("invalid dealId passed");
+            return null;
+        }
+        List<ContactDropdownView> viewList = contactRepository.findByDeal_Id(dealId);
+        viewList.addAll(consultantRepository.findByDeal_Id(dealId));
+
+        return dropdownMapper.getContactDropdownKeyValuesDetails(dropdownType, viewList);
+    };
 
     private GetDerivedDropdownValue getBrochuresNames = (dropdownType) -> {
         List<BrochureDropdownView> viewList = brochureRepository.findByIsActiveTrueOrderByUpdateTimestampDesc();

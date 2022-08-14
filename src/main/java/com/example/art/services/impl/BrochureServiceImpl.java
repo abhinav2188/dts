@@ -58,20 +58,16 @@ public class BrochureServiceImpl implements BrochureService {
         if(!serviceUtils.isUserAdmin()) throw new NoAuthorizationException("Brochure");
 
         try{
-//            // generate custom file name
+            // generate custom file name
             String fname = getBrochureName(file.getOriginalFilename(), brochureName);
-//
-//            // create or replace file
-//            Files.copy(file.getInputStream(), getBrochuresPath(fname), StandardCopyOption.REPLACE_EXISTING);
-//
+
             // upload path
             String uploadPath = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("api/download/").path(fname)
                     .toUriString();
 
-            String fileCode = fileStorageService.saveFile(fname,file);
-            String downloadUri = "api/download/"+fileCode;
+            fileStorageService.saveFile(fname,file);
 
             // updating database brochure table
             Brochure saved = updateBrochureEntity(brochureName, uploadPath);

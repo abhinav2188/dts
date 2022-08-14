@@ -64,7 +64,7 @@ public class DropdownMapper {
 
     private DropdownValueDetails getDropdownValueDetails(ContactDropdownView view) {
         DropdownValueDetails details = new DropdownValueDetails();
-        details.setValue(view.getName());
+        details.setValue(view.getEmail());
         details.setId(view.getId());
         return details;
     }

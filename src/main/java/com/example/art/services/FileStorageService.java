@@ -1,5 +1,6 @@
 package com.example.art.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -20,19 +21,25 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class FileStorageService {
 
-    private final String UPLOAD_PATH = "brochures/";
+    private final String UPLOAD_PATH = "static"+ File.separator +"brochures";
 
     public String saveFile(String fileName, MultipartFile multipartFile)
             throws IOException {
 
-        Path uploadPath = Paths.get(new ClassPathResource(UPLOAD_PATH).getFile().getAbsolutePath());
-        log.info("uploadPath:"+uploadPath);
+        Path path = Paths.get(UPLOAD_PATH);
 
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+        if (!Files.exists(path)) {
+            Files.createDirectories(path);
         }
+//
+        Path uploadPath = path.toAbsolutePath().normalize();
+//        log.info("uploadPath: "+uploadPath);
+
+//        String path = new ClassPathResource("static/files/").getFile().getAbsolutePath();
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
+//            Path filePath = Paths.get(new ClassPathResource(UPLOAD_PATH+File.separator+fileName).getFile().getAbsolutePath());
+//            Path filePath2 = Paths.get(path+File.separator+fileName);
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ioe) {
@@ -44,8 +51,8 @@ public class FileStorageService {
 
     public Resource getFileAsResource(String fileName) throws IOException {
 
-        Path dirPath = Paths.get(new ClassPathResource(UPLOAD_PATH).getFile().getAbsolutePath());
-        Path filePath = dirPath.resolve(fileName);
+//        Path dirPath = Paths.get(new ClassPathResource(UPLOAD_PATH).getFile().getAbsolutePath());
+        Path filePath = Paths.get(UPLOAD_PATH).resolve(fileName).toAbsolutePath();
 
         Resource resource = new UrlResource(filePath.toUri());
 
