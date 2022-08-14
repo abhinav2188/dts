@@ -1,6 +1,7 @@
 package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
+import com.example.art.model.views.DealExcelView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,20 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@NamedNativeQuery(name = "Deal.findAllDealExcelView_Named",
+        query = "SELECT d.id, d.name as deal_name , p.party_name as party_name," +
+                " group_concat(u.email separator ',') as co_owners " +
+                "from (user u join deal_co_owners dco on u.id=dco.co_owners_id)" +
+                " join deal d on d.id = dco.co_owned_deals_id join party p on p.id = d.party_id " +
+                "group by d.name order by d.name",
+        resultSetMapping = "Mapping.DealExcelView")
+@SqlResultSetMapping(name = "Mapping.DealExcelView",
+        classes = @ConstructorResult(targetClass = DealExcelView.class,
+                columns = {@ColumnResult(name = "id", type=Long.class),
+                        @ColumnResult(name = "deal_name", type=String.class),
+                        @ColumnResult(name = "party_name", type=String.class),
+                        @ColumnResult(name = "co_owners", type=String.class)
+                }))
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
