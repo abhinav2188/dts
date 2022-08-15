@@ -1,33 +1,15 @@
 package com.example.art.model.views;
 
-import com.example.art.model.Deal;
-import com.example.art.model.Party;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
-@ToString
-public class DealExcelView {
+@AllArgsConstructor
+public class DealExcelViewPartial {
 
     private Long id;
-
-    private String dealName;
-
-    private String partyName;
-
-    private String coOwners;
-
-    public DealExcelView(Long id, String dealName, String partyName, String coOwners) {
-        this.id = id;
-        this.dealName = dealName;
-        this.partyName = partyName;
-        this.coOwners = coOwners;
-    }
 
     private String productType;
 
@@ -82,4 +64,3 @@ public class DealExcelView {
     private String proximityFromBase;
 
 }
-

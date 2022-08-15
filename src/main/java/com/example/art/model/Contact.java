@@ -1,11 +1,32 @@
 package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
+import com.example.art.model.views.ContactExcelView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Date;
 
+
+@NamedNativeQuery(name = "Contact.findAllContactExcelViews_Named",
+        query = "select c.id, c.create_timestamp, c.update_timestamp, c.name, " +
+                "c.email, c.mobile, c.designation, c.deal_id, d.name as deal_name " +
+                "from contact c join deal d on c.deal_id = d.id",
+        resultSetMapping = "Mapping.ContactExcelView")
+@SqlResultSetMapping(name = "Mapping.ContactExcelView",
+        classes = @ConstructorResult(targetClass = ContactExcelView.class,
+                columns = {
+                @ColumnResult(name = "id", type=Long.class),
+                        @ColumnResult(name = "create_timestamp", type=Date.class),
+                        @ColumnResult(name = "update_timestamp", type=Date.class),
+                        @ColumnResult(name = "name", type=String.class),
+                        @ColumnResult(name = "email", type=String.class),
+                        @ColumnResult(name = "mobile", type=String.class),
+                        @ColumnResult(name = "designation", type=String.class),
+                        @ColumnResult(name = "deal_id", type=Long.class),
+                        @ColumnResult(name = "deal_name", type=String.class),
+                }))
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data

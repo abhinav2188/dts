@@ -2,6 +2,7 @@ package com.example.art.repository;
 
 import com.example.art.model.Party;
 import com.example.art.model.views.PartyDropdownView;
+import com.example.art.model.views.PartyExcelView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,5 +19,7 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     Optional<Party> findByPartyName(String partyName);
 
     List<PartyDropdownView> findByIsActiveTrueOrderByCreateTimestampDesc();
+
+    List<PartyExcelView> findByIdNotNull();
 
 }

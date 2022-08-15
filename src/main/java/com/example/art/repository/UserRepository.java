@@ -1,6 +1,7 @@
 package com.example.art.repository;
 
 import com.example.art.model.User;
+import com.example.art.model.views.UserExcelView;
 import com.example.art.model.views.UserHandlerDropdownView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserHandlerDropdownView> findByIsActiveTrueAndCoOwnedDeals_Id(@NonNull Long id);
 
     boolean existsByCoOwnedDeals_Id(Long id);
+
+    List<UserExcelView> findByIdNotNull();
 
 }

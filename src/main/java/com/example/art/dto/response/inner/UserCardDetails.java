@@ -1,6 +1,7 @@
 package com.example.art.dto.response.inner;
 
 import com.example.art.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
