@@ -9,10 +9,13 @@ import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Contact;
 import com.example.art.model.Deal;
+import com.example.art.model.DealHistory;
+import com.example.art.model.enums.DealSubject;
 import com.example.art.model.enums.UserRole;
 import com.example.art.repository.ContactRepository;
 import com.example.art.repository.DealRepository;
 import com.example.art.services.ContactService;
+import com.example.art.services.DealHistoryService;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import org.slf4j.MDC;
@@ -36,6 +39,9 @@ public class ContactServiceImpl implements ContactService {
     @Autowired
     private ContactMapper mapper;
 
+    @Autowired
+    private DealHistoryService dealHistoryService;
+
     @Override
     public BaseResponse<ContactDetails> addContact(Long dealId, CreateContactRequest request) throws EntityNotFoundException, NoAuthorizationException {
 
@@ -50,9 +56,12 @@ public class ContactServiceImpl implements ContactService {
 
         Contact saved = contactRepository.save(contact);
 
+        ContactDetails response = mapper.getContactDetails(saved);
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.ADDED_DEAL_CONTACT, response);
+
         return BaseResponse.<ContactDetails>builder()
                 .responseMsg(MessageUtils.successPostMessage("Contact"))
-                .data(mapper.getContactDetails(saved))
+                .data(response)
                 .status(HttpStatus.CREATED)
                 .build();
     }
@@ -90,6 +99,8 @@ public class ContactServiceImpl implements ContactService {
         checkUserAuthorization(deal);
 
         contactRepository.delete(contact);
+
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.DELETED_DEAL_CONTACT, mapper.getContactDetails(contact));
 
         return BaseResponse.builder()
                 .status(HttpStatus.OK)
