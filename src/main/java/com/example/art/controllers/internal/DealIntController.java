@@ -30,13 +30,6 @@ public class DealIntController {
         return dealService.updateDealSection4(dealId, requestDto);
     }
 
-    @PatchMapping("/{dealId}/auth")
-    public BaseResponse updateDealAuthorization(@PathVariable Long dealId,
-                                                @RequestBody UpdateDealAuthorizationRequest request)
-            throws EntityNotFoundException {
-        return dealService.updateDealAuthorization(dealId, request);
-    }
-
     @GetMapping("/{dealId}")
     public BaseResponse<DealDetailResponse> getDealDetails(@PathVariable Long dealId,
                                                            @RequestParam(name = "userId", required = false) Long userId)
@@ -47,7 +40,7 @@ public class DealIntController {
     @PatchMapping("/{dealId}/add-auth")
     public BaseResponse<DealUserDetails> addDealOwner(@PathVariable Long dealId,
                                                       @Valid @RequestBody UpdateDealOwnerRequest request)
-            throws UserNotFoundException, NoAuthorizationException, EntityNotFoundException, InvalidOperationException {
+            throws NoAuthorizationException, EntityNotFoundException, InvalidOperationException {
         return dealService.addDealOwner(dealId, request.getEmail());
     }
 
@@ -56,6 +49,14 @@ public class DealIntController {
                                                          @Valid @RequestBody UpdateDealOwnerRequest request)
             throws NoAuthorizationException, EntityNotFoundException, InvalidOperationException {
         return dealService.removeDealOwner(dealId, request.getEmail());
+    }
+
+    // not used until
+    @PatchMapping("/{dealId}/auth")
+    public BaseResponse updateDealAuthorization(@PathVariable Long dealId,
+                                                @RequestBody UpdateDealAuthorizationRequest request)
+            throws EntityNotFoundException {
+        return dealService.updateDealAuthorization(dealId, request);
     }
 
 }

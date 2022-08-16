@@ -290,7 +290,7 @@ public class DealServiceImpl implements DealService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow( () -> new EntityNotFoundException("User","email",userEmail));
 
-        if(userRepository.existsByCoOwnedDeals_Id(dealId)){
+        if(userRepository.existsByCoOwnedDeals_IdAndEmail(dealId,userEmail)){
             throw new InvalidOperationException("user already a co-owner");
         }
 
@@ -319,7 +319,7 @@ public class DealServiceImpl implements DealService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow( () -> new EntityNotFoundException("User","email",userEmail));
 
-        if(!userRepository.existsByCoOwnedDeals_Id(dealId)){
+        if(!userRepository.existsByCoOwnedDeals_IdAndEmail(dealId,userEmail)){
             throw new InvalidOperationException("User not a co-owner to be removed");
         }
         if(getCurrentUserId().equals(user.getId())){
@@ -337,7 +337,6 @@ public class DealServiceImpl implements DealService {
                 .build();
 
     }
-
 
     private boolean isUserAdmin() {
         String roles = MDC.get(Constants.USER_ROLES);

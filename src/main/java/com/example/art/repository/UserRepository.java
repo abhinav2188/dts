@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByCoOwnedDeals_Id(Long id);
 
+    boolean existsByCoOwnedDeals_IdAndEmail(Long id, String email);
+
     List<UserExcelView> findByIdNotNull();
 
 }
