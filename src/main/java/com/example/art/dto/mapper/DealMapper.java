@@ -19,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -50,25 +48,19 @@ public class DealMapper {
         return deal;
     }
 
-    public int updateProductDetails(Deal deal, UpdateProductDetailsRequest requestDto) {
-        List<String> updateMsgs = new ArrayList<>();
-        int count = mapperUtils.updateEntity(deal,requestDto,updateMsgs);
-        log.info("Deal with id {} updated : {}",deal.getId(), updateMsgs);
-        return count;
+    public Map<String,String> updateProductDetails(Deal deal, UpdateProductDetailsRequest requestDto) {
+        Map<String,String> updatedAttibutes = mapperUtils.updateEntity(deal,requestDto);
+        return updatedAttibutes;
     }
 
-    public int updateDeal(Deal deal, UpdateDealSection3Request requestDto) {
-        List<String> updateMsgs = new ArrayList<>();
-        int count = mapperUtils.updateEntity(deal,requestDto,updateMsgs);
-        log.info("Deal with id {} updated : {}",deal.getId(), updateMsgs);
-        return count;
+    public Map<String,String> updateDeal(Deal deal, UpdateDealSection3Request requestDto) {
+        Map<String,String> updatedAttibutes = mapperUtils.updateEntity(deal,requestDto);
+        return updatedAttibutes;
     }
 
-    public int updateDeal(Deal deal, UpdateDealSection4Request requestDto) {
-        List<String> updateMsgs = new ArrayList<>();
-        int count = mapperUtils.updateEntity(deal,requestDto,updateMsgs);
-        log.info("Deal with id {} updated : {}",deal.getId(), updateMsgs);
-        return count;
+    public Map<String,String> updateDeal(Deal deal, UpdateDealSection4Request requestDto) {
+        Map<String,String> updatedAttibutes = mapperUtils.updateEntity(deal,requestDto);
+        return updatedAttibutes;
     }
 
     public MultipleDealsResponse getMultipleDealsResponse(Page<Deal> page) {

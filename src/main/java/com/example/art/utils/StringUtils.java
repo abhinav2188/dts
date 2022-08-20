@@ -14,7 +14,7 @@ public class StringUtils {
     }
 
     public boolean isUpdateable(Object oldVal, Object newVal){
-        return newVal!= null && !newVal.equals(oldVal) && newVal!="";
+        return newVal!= null  && newVal!="" && !newVal.equals(oldVal);
     }
 
 }

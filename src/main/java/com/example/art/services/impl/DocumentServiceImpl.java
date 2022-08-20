@@ -10,9 +10,12 @@ import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Deal;
 import com.example.art.model.Document;
+import com.example.art.model.enums.DealSubject;
 import com.example.art.model.views.DocumentView;
 import com.example.art.repository.DocumentRepository;
+import com.example.art.services.DealHistoryService;
 import com.example.art.services.DocumentService;
+import com.example.art.services.helper.ServiceUtils;
 import com.example.art.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +43,11 @@ public class DocumentServiceImpl implements DocumentService {
     @Autowired
     private DocumentMapper documentsMapper;
 
+    @Autowired
+    private DealHistoryService dealHistoryService;
+
     @Override
-    public BaseResponse<SuccessCreateResponse> storeFile(Long dealId, MultipartFile file)
+    public BaseResponse<AttachmentDetails> storeFile(Long dealId, MultipartFile file)
             throws DocumentStorageException, EntityNotFoundException, NoAuthorizationException{
 
         Deal deal = serviceUtils.getDeal(dealId);
@@ -49,12 +55,16 @@ public class DocumentServiceImpl implements DocumentService {
 
         Document document = documentsMapper.getDocument(file);
         document.setDeal(deal);
-        documentRepository.save(document);
+        Document saved = documentRepository.save(document);
 
-        return BaseResponse.<SuccessCreateResponse>builder()
+        AttachmentDetails attachmentDetails = documentsMapper.getAttachmentDetails(saved);
+
+        dealHistoryService.addDealHistory(dealId, DealSubject.ADDED_DEAL_ATTACHMENT, attachmentDetails);
+
+        return BaseResponse.<AttachmentDetails>builder()
                 .status(HttpStatus.OK)
                 .responseMsg(MessageUtils.successPostMessage("Document"))
-                .data(new SuccessCreateResponse(document.getId()))
+                .data(attachmentDetails)
                 .build();
 
     }
@@ -88,6 +98,8 @@ public class DocumentServiceImpl implements DocumentService {
         serviceUtils.checkUserAuthorization(deal);
 
         documentRepository.deleteById(docId);
+
+        dealHistoryService.addDealHistory(dealId, DealSubject.DELETED_DEAL_ATTACHMENT, docId);
 
         return BaseResponse.builder()
                 .status(HttpStatus.OK)

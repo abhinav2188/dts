@@ -3,6 +3,7 @@ package com.example.art.controllers;
 import com.example.art.dto.response.AttachmentsResponse;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.SuccessCreateResponse;
+import com.example.art.dto.response.inner.AttachmentDetails;
 import com.example.art.exceptions.DocumentStorageException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
@@ -22,7 +23,7 @@ public class DocumentUploadController {
     private DocumentService documentService;
 
     @PostMapping
-    public BaseResponse<SuccessCreateResponse> uploadDealFile(@RequestParam("file") MultipartFile file,
+    public BaseResponse<AttachmentDetails> uploadDealFile(@RequestParam("file") MultipartFile file,
                                                           @PathVariable("dealId") Long dealId)
             throws DocumentStorageException, EntityNotFoundException, NoAuthorizationException {
         return documentService.storeFile(dealId, file);

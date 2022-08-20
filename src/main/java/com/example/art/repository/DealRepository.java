@@ -21,4 +21,7 @@ public interface DealRepository extends JpaRepository<Deal,Long> {
     @Query(nativeQuery = true)
     List<DealExcelView> findAllDealExcelView_Named();
 
+    boolean existsByIdAndCoOwners_Id(Long dealId, Long userId);
+
+
 }

@@ -10,9 +10,11 @@ import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Interaction;
 import com.example.art.model.Deal;
+import com.example.art.model.enums.DealSubject;
 import com.example.art.model.enums.UserRole;
 import com.example.art.repository.InteractionRepository;
 import com.example.art.repository.DealRepository;
+import com.example.art.services.DealHistoryService;
 import com.example.art.services.InteractionService;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
@@ -37,6 +39,9 @@ public class InteractionServiceImpl implements InteractionService {
     @Autowired
     private InteractionMapper mapper;
 
+    @Autowired
+    private DealHistoryService dealHistoryService;
+
     @Override
     public BaseResponse<InteractionDetails> addInteraction(Long dealId, CreateInteractionRequest request) throws EntityNotFoundException, NoAuthorizationException {
 
@@ -52,10 +57,14 @@ public class InteractionServiceImpl implements InteractionService {
 
         Interaction saved = interactionRepository.save(interaction);
 
+        InteractionDetails response = mapper.getInteractionDetails(saved);
+
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.ADDED_DEAL_INTERACTION, response);
+
         return BaseResponse.<InteractionDetails>builder()
                 .responseMsg(MessageUtils.successPostMessage("Interaction"))
                 .status(HttpStatus.CREATED)
-                .data(mapper.getInteractionDetails(saved))
+                .data(response)
                 .build();
     }
 
@@ -93,6 +102,9 @@ public class InteractionServiceImpl implements InteractionService {
 
         interactionRepository.delete(interaction);
 
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.DELETED_DEAL_INTERACTION,
+                mapper.getInteractionDetails(interaction));
+
         return BaseResponse.builder()
                 .status(HttpStatus.OK)
                 .responseMsg(MessageUtils.successDeleteMessage("Interaction"))
@@ -114,6 +126,8 @@ public class InteractionServiceImpl implements InteractionService {
         mapper.updateInteraction(interaction, request);
 
         interactionRepository.save(interaction);
+
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.UPDATED_DEAL_INTERACTION, request);
 
         return BaseResponse.builder()
                 .status(HttpStatus.OK)

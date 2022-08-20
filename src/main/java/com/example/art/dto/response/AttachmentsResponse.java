@@ -12,6 +12,6 @@ public class AttachmentsResponse {
 
     private int totalCount;
 
-    private List<AttachmentDetails> info;
+    private List<AttachmentDetails> attachments;
 
 }

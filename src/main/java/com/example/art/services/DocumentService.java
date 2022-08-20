@@ -3,6 +3,7 @@ package com.example.art.services;
 import com.example.art.dto.response.AttachmentsResponse;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.SuccessCreateResponse;
+import com.example.art.dto.response.inner.AttachmentDetails;
 import com.example.art.exceptions.DocumentStorageException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface DocumentService {
     
-    BaseResponse<SuccessCreateResponse> storeFile(Long dealId, MultipartFile file)
+    BaseResponse<AttachmentDetails> storeFile(Long dealId, MultipartFile file)
             throws DocumentStorageException, EntityNotFoundException, NoAuthorizationException;
 
     ResponseEntity<Resource> getFile(String docId) throws EntityNotFoundException;

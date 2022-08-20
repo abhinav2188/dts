@@ -10,10 +10,12 @@ import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Consultant;
 import com.example.art.model.Deal;
+import com.example.art.model.enums.DealSubject;
 import com.example.art.model.enums.UserRole;
 import com.example.art.repository.ConsultantRepository;
 import com.example.art.repository.DealRepository;
 import com.example.art.services.ConsultantService;
+import com.example.art.services.DealHistoryService;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,9 @@ public class ConsultantServiceImpl implements ConsultantService {
     @Autowired
     private ConsultantMapper mapper;
 
+    @Autowired
+    private DealHistoryService dealHistoryService;
+
     @Override
     public BaseResponse<ConsultantDetails> addConsultant(Long dealId, CreateConsultantRequest request) throws EntityNotFoundException, NoAuthorizationException {
 
@@ -52,6 +57,9 @@ public class ConsultantServiceImpl implements ConsultantService {
         consultant.setDeal(deal);
 
         Consultant saved = consultantRepository.save(consultant);
+
+        ConsultantDetails response = mapper.getConsultantDetails(saved);
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.ADDED_DEAL_CONSULTANT, response);
 
         return BaseResponse.<ConsultantDetails>builder()
                 .responseMsg(MessageUtils.successPostMessage("Consultant"))
@@ -93,6 +101,8 @@ public class ConsultantServiceImpl implements ConsultantService {
         checkUserAuthorization(deal);
 
         consultantRepository.delete(consultant);
+
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.DELETED_DEAL_CONSULTANT, mapper.getConsultantDetails(consultant));
 
         return BaseResponse.<SuccessDeleteResponse>builder()
                 .status(HttpStatus.OK)

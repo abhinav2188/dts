@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,7 +41,10 @@ public class DocumentMapper {
     }
 
     private String createDocPath(String id){
-        return projectPath+"/api/docs/"+id;
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("api/docs/").path(id)
+                .toUriString();
     }
 
     public AttachmentsResponse createAttachmentsResponse(List<DocumentView> documents) {
@@ -50,11 +54,19 @@ public class DocumentMapper {
         return new AttachmentsResponse(attachmentDetailsList.size(), attachmentDetailsList);
     }
 
-    private AttachmentDetails getAttachmentDetails(DocumentView documentView) {
+    public AttachmentDetails getAttachmentDetails(DocumentView documentView) {
         AttachmentDetails details = new AttachmentDetails();
         mapperUtils.updateResponseFromEntity(documentView,details);
         details.setPath(createDocPath(details.getId()));
         return details;
     }
+
+    public AttachmentDetails getAttachmentDetails(Document document) {
+        AttachmentDetails details = new AttachmentDetails();
+        mapperUtils.updateResponseFromEntity(document,details);
+        details.setPath(createDocPath(details.getId()));
+        return details;
+    }
+
 
 }

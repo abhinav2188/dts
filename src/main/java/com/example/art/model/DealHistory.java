@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -16,7 +17,7 @@ public class DealHistory{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String createdAt;
+    private Date createdAt;
 
     private Long userId;
 
@@ -26,6 +27,7 @@ public class DealHistory{
 
     private String title;
 
+    @Column(length = 5000)
     private String details;
 
     public Long getId() {

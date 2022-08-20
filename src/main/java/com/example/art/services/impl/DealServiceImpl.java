@@ -12,10 +12,12 @@ import com.example.art.exceptions.*;
 import com.example.art.model.Deal;
 import com.example.art.model.Party;
 import com.example.art.model.User;
+import com.example.art.model.enums.DealSubject;
 import com.example.art.model.enums.UserRole;
 import com.example.art.repository.DealRepository;
 import com.example.art.repository.PartyRepository;
 import com.example.art.repository.UserRepository;
+import com.example.art.services.DealHistoryService;
 import com.example.art.services.DealService;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,9 @@ public class DealServiceImpl implements DealService {
 
     @Autowired
     private StringUtils stringUtils;
+
+    @Autowired
+    private DealHistoryService dealHistoryService;
 
     @Override
     public BaseResponse<DealCardDetails> createDeal(CreateDealRequest requestDto)
@@ -77,10 +83,14 @@ public class DealServiceImpl implements DealService {
         log.info("new deal created with name {}, with party {}, by user {}",
                 deal.getName(), party.getPartyName(), user.getEmail());
 
+        DealCardDetails dealCardDetails = dealMapper.getDealCardDetails(saved);
+
+        dealHistoryService.addDealHistory(saved.getId(), DealSubject.CREATED_DEAL, dealCardDetails);
+
         return BaseResponse.<DealCardDetails>builder()
                 .responseMsg("deal created")
                 .status(HttpStatus.CREATED)
-                .data(dealMapper.getDealCardDetails(saved))
+                .data(dealCardDetails)
                 .build();
     }
 
@@ -93,13 +103,15 @@ public class DealServiceImpl implements DealService {
 
         User user = validateUserAuthorization(deal);
 
-        int updateCount = dealMapper.updateProductDetails(deal,requestDto);
+        Map<String,String> updates =  dealMapper.updateProductDetails(deal,requestDto);
 
         Deal deal1 = dealRepository.save(deal);
 
-        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
+        dealHistoryService.addDealHistory(deal1.getId(), DealSubject.UPDATED_DEAL_PRODUCT_DETAILS, updates);
+
+        //        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
         return BaseResponse.builder()
-                .responseMsg(msg)
+                .responseMsg("Deal Updated")
                 .status(HttpStatus.CREATED)
                 .build();
     }
@@ -113,13 +125,15 @@ public class DealServiceImpl implements DealService {
 
         User user = validateUserAuthorization(deal);
 
-        int updateCount = dealMapper.updateDeal(deal,requestDto);
+        Map<String,String> updates = dealMapper.updateDeal(deal,requestDto);
+        log.info("section3 updates: {}",updates);
 
-        dealRepository.save(deal);
+        Deal deal1 = dealRepository.save(deal);
 
-        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
+        dealHistoryService.addDealHistory(deal1.getId(), DealSubject.UPDATED_DEAL_COMMON_DETAILS, updates);
+
         return BaseResponse.builder()
-                .responseMsg(msg)
+                .responseMsg("Deal Updated")
                 .status(HttpStatus.CREATED)
                 .build();
     }
@@ -133,13 +147,14 @@ public class DealServiceImpl implements DealService {
 
         User user = validateUserAuthorization(deal);
 
-        int updateCount = dealMapper.updateDeal(deal,requestDto);
+        Map<String,String> updates = dealMapper.updateDeal(deal,requestDto);
 
-        dealRepository.save(deal);
+        Deal deal1 = dealRepository.save(deal);
 
-        String msg = "Updated " + updateCount + " fields of deal with id=" + dealId;
+        dealHistoryService.addDealHistory(deal1.getId(), DealSubject.UPDATED_DEAL_ADDITIONAL_DETAILS, updates);
+
         return BaseResponse.builder()
-                .responseMsg(msg)
+                .responseMsg("Deal Updated")
                 .status(HttpStatus.CREATED)
                 .build();
 
@@ -244,7 +259,7 @@ public class DealServiceImpl implements DealService {
                 () -> new EntityNotFoundException("Deal","id",dealId));
 
         if(!isUserAdmin()){
-//            if(!getCurrentUserId().equals(userId))
+//            if(!getCurrentUserId().equals(userId))0
 //                throw new NoAuthorizationException(MessageUtils.noAuthorization("Deal"));
             validateUserAuthorization(deal);
         }
@@ -296,7 +311,9 @@ public class DealServiceImpl implements DealService {
 
         user.addDeal(deal);
 
-        dealRepository.save(deal);
+        Deal deal1 = dealRepository.save(deal);
+
+        dealHistoryService.addDealHistory(deal1.getId(), DealSubject.UPDATED_DEAL_AUTHORIZATION, "added "+userEmail +" as a deal owner");
 
         return BaseResponse.<DealUserDetails>builder()
                 .status(HttpStatus.OK)
@@ -328,7 +345,7 @@ public class DealServiceImpl implements DealService {
 
         deal.removeUser(user);
 
-        dealRepository.save(deal);
+        dealHistoryService.addDealHistory(deal.getId(), DealSubject.UPDATED_DEAL_AUTHORIZATION, "removed "+userEmail +" from deal owners");
 
         return BaseResponse.<DealUserDetails>builder()
                 .status(HttpStatus.OK)
