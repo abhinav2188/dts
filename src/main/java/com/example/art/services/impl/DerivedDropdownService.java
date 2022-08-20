@@ -42,6 +42,9 @@ public class DerivedDropdownService {
     private BrochureRepository brochureRepository;
 
     @Autowired
+    private DealRepository dealRepository;
+
+    @Autowired
     private DropdownMapper dropdownMapper;
 
     private Map<DropdownType, GetDerivedDropdownValue> map;
@@ -55,6 +58,9 @@ public class DerivedDropdownService {
         map.put(DropdownType.MEETING_CONTACT, getContactNames);
         map.put(DropdownType.BROCHURES_TYPE, getBrochuresNames);
         map.put(DropdownType.DEAL_RECIPIENTS, getRecipients);
+        map.put(DropdownType.USER_EMAIL, getUserEmails);
+        map.put(DropdownType.PARTY_NAME, getPartyNamesAll);
+        map.put(DropdownType.DEAL_NAME, getDealNames);
     }
 
 
@@ -63,6 +69,11 @@ public class DerivedDropdownService {
             return new DropdownKeyValuesDetails(dropdownType.name(),dropdownType.getFormType().name(), new ArrayList<>());
         return map.get(dropdownType).getDetails(dropdownType);
     }
+
+    private GetDerivedDropdownValue getUserEmails = (dropdownType) -> {
+        List<UserDropdownView> viewList = userRepository.findByEmailNotNull();
+        return dropdownMapper.getHandlerDropdownKeyValuesDetails(dropdownType,viewList);
+    };
 
     private GetDerivedDropdownValue getRecipients = (dropdownType) -> {
         // returning contacts and consultants emails of a deal
@@ -94,6 +105,11 @@ public class DerivedDropdownService {
         return dropdownMapper.getPartyDropdownKeyValuesDetails(dropdownType,viewList);
     };
 
+    private GetDerivedDropdownValue getPartyNamesAll = (dropdownType) -> {
+        List<PartyDropdownView> viewList = partyRepository.findByOrderByCreateTimestampDesc();
+        return dropdownMapper.getPartyDropdownKeyValuesDetails(dropdownType,viewList);
+    };
+
     private GetDerivedDropdownValue getHandlerEmails = (dropdownType -> {
         Long dealId;
         try {
@@ -102,7 +118,7 @@ public class DerivedDropdownService {
             log.error("invalid dealId passed");
             return null;
         }
-        List<UserHandlerDropdownView> viewList = userRepository.findByIsActiveTrueAndCoOwnedDeals_Id(dealId);
+        List<UserDropdownView> viewList = userRepository.findByIsActiveTrueAndCoOwnedDeals_Id(dealId);
         return dropdownMapper.getHandlerDropdownKeyValuesDetails(dropdownType, viewList);
     });
 
@@ -130,5 +146,9 @@ public class DerivedDropdownService {
         return dropdownMapper.getConsultantDropdownKeyValuesDetails(dropdownType, viewList);
     });
 
+    private GetDerivedDropdownValue getDealNames = (dropdownType -> {
+        List<DealDropdownView> viewList = dealRepository.findByNameNotNull();
+        return dropdownMapper.getDealDropdownKeyValuesDetails(dropdownType, viewList);
+    });
 
 }

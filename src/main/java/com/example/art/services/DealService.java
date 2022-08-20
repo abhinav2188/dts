@@ -31,4 +31,6 @@ public interface DealService {
     BaseResponse<DealUserDetails> addDealOwner(Long dealId, String userEmail) throws EntityNotFoundException, NoAuthorizationException, InvalidOperationException;
 
     BaseResponse<DealUserDetails> removeDealOwner(Long dealId, String userEmail) throws NoAuthorizationException, EntityNotFoundException, InvalidOperationException;
+
+    BaseResponse<MultipleDealsResponse> getMultipleDeals(int pageNo, int pageSize, String dealName, String partyName, String coOwnerEmail);
 }

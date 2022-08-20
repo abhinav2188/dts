@@ -5,6 +5,7 @@ import com.example.art.dto.request.UpdateDealOwnerRequest;
 import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
+import com.example.art.dto.response.MultipleDealsResponse;
 import com.example.art.dto.response.inner.DealUserDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.InvalidOperationException;

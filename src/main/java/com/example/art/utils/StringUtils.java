@@ -17,4 +17,8 @@ public class StringUtils {
         return newVal!= null  && newVal!="" && !newVal.equals(oldVal);
     }
 
+    public boolean isNotEmpty(String val){
+        return val!=null && !"".equals(val);
+    }
+
 }

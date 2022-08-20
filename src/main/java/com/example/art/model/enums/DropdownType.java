@@ -32,6 +32,10 @@ public enum DropdownType {
 
     CURRENT_DEAL_STAGE(FormType.DEAL_ADDITIONAL, true, false),
     PAYMENT_TERMS(FormType.DEAL_ADDITIONAL, false, false),
+
+    PARTY_NAME(FormType.DEAL_SEARCH, false, true),
+    DEAL_NAME(FormType.DEAL_SEARCH, false, true),
+    USER_EMAIL(FormType.DEAL_SEARCH, false, true),
 //    DEAL_OWNER(FormType.DEAL_ADDITIONAL, false, true),
 
     ;

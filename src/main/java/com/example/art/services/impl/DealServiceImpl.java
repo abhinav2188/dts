@@ -23,6 +23,7 @@ import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import com.example.art.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.util.StringUtil;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -353,6 +354,35 @@ public class DealServiceImpl implements DealService {
                 .data(dealMapper.getDealUserDetails(user))
                 .build();
 
+    }
+
+    @Override
+    public BaseResponse<MultipleDealsResponse> getMultipleDeals(int pageNo, int pageSize, String dealName, String partyName, String coOwnerEmail) {
+
+        if(!stringUtils.isNotEmpty(dealName)) dealName="%";
+        if(!stringUtils.isNotEmpty(partyName)) partyName="%";
+        if(!stringUtils.isNotEmpty(coOwnerEmail)) coOwnerEmail="%";
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("updateTimestamp").descending());
+        Page<Deal> page = null;
+
+        if(isUserAdmin()){
+            page = dealRepository.findDistinctByCoOwners_EmailLikeAndParty_PartyNameLikeAndNameLike(coOwnerEmail,partyName,dealName,pageable);
+        }else{
+            Long userId = getCurrentUserId();
+            page = dealRepository.findDistinctByCoOwners_IdAndCoOwners_EmailLikeAndParty_PartyNameLikeAndNameLike(
+                    userId, coOwnerEmail, partyName, dealName, pageable);
+        }
+
+        MultipleDealsResponse response = dealMapper.getMultipleDealsResponse(page);
+
+        String msg = MessageUtils.successMultipleDealResponse(response.getDeals().size());
+
+        return BaseResponse.<MultipleDealsResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg(msg)
+                .data(response)
+                .build();
     }
 
     private boolean isUserAdmin() {

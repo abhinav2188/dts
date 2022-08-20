@@ -20,6 +20,8 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     List<PartyDropdownView> findByIsActiveTrueOrderByCreateTimestampDesc();
 
+    List<PartyDropdownView> findByOrderByCreateTimestampDesc();
+
     List<PartyExcelView> findByIdNotNull();
 
 }

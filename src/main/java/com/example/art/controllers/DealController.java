@@ -2,6 +2,7 @@ package com.example.art.controllers;
 
 import com.example.art.dto.request.CreateDealRequest;
 import com.example.art.dto.request.UpdateDealSection3Request;
+import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse2;
@@ -42,10 +43,20 @@ public class DealController {
         return dealService.updateDealSection3(dealId, requestDto);
     }
 
+    @PatchMapping("/{dealId}/s4")
+    public BaseResponse updateDealSection4(@PathVariable Long dealId,
+                                           @RequestBody UpdateDealSection4Request requestDto)
+            throws NoAuthorizationException, EntityNotFoundException {
+        return dealService.updateDealSection4(dealId, requestDto);
+    }
+
     @GetMapping("/all")
-    public BaseResponse<MultipleDealsResponse> getMultipleDeals(@RequestParam(name = "pageNo") int pageNo,
-                                                                @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
-        return dealService.getMultipleDeals(pageNo,pageSize);
+    public BaseResponse<MultipleDealsResponse> getDeals(@RequestParam(name = "pageNo") int pageNo,
+                                                        @RequestParam(name = "pageSize", required = false, defaultValue = "15") int pageSize,
+                                                        @RequestParam(name="dealName", required = false) String dealName,
+                                                        @RequestParam(name="partyName", required = false) String partyName,
+                                                        @RequestParam(name="coOwnerEmail", required = false) String coOwnerEmail) {
+        return dealService.getMultipleDeals(pageNo,pageSize,dealName,partyName,coOwnerEmail);
     }
 
     @GetMapping("/{dealId}")

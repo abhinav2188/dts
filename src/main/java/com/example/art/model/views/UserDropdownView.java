@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserHandlerDropdownView {
+public class UserDropdownView {
 
     private Long id;
 

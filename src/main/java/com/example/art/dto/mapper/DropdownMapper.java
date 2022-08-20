@@ -31,7 +31,7 @@ public class DropdownMapper {
         return details;
     }
 
-    public DropdownKeyValuesDetails getHandlerDropdownKeyValuesDetails(DropdownType dropdownType, List<UserHandlerDropdownView> viewList) {
+    public DropdownKeyValuesDetails getHandlerDropdownKeyValuesDetails(DropdownType dropdownType, List<UserDropdownView> viewList) {
         DropdownKeyValuesDetails details = new DropdownKeyValuesDetails();
         details.setDropdownKey(dropdownType.name());
         details.setFormName(dropdownType.getFormType().name());
@@ -42,7 +42,7 @@ public class DropdownMapper {
         return details;
     }
 
-    private DropdownValueDetails getDropdownValueDetails(UserHandlerDropdownView view) {
+    private DropdownValueDetails getDropdownValueDetails(UserDropdownView view) {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(view.getEmail());
         details.setId(view.getId());
@@ -102,4 +102,21 @@ public class DropdownMapper {
         return details;
     }
 
+    public DropdownKeyValuesDetails getDealDropdownKeyValuesDetails(DropdownType dropdownType, List<DealDropdownView> viewList) {
+        DropdownKeyValuesDetails details = new DropdownKeyValuesDetails();
+        details.setDropdownKey(dropdownType.name());
+        details.setFormName(dropdownType.getFormType().name());
+        List<DropdownValueDetails> valueDetails = viewList.stream()
+                .map(this::getDropdownValueDetails)
+                .collect(Collectors.toList());
+        details.setValues(valueDetails);
+        return details;
+    }
+
+    private DropdownValueDetails getDropdownValueDetails(DealDropdownView dealDropdownView) {
+        DropdownValueDetails details = new DropdownValueDetails();
+        details.setValue(dealDropdownView.getName());
+        details.setId(dealDropdownView.getId());
+        return details;
+    }
 }
