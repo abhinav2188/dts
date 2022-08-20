@@ -21,8 +21,10 @@ import java.util.Date;
                         @ColumnResult(name = "create_timestamp", type=Date.class),
                         @ColumnResult(name = "update_timestamp", type=Date.class),
                         @ColumnResult(name = "name", type=String.class),
-                        @ColumnResult(name = "email", type=String.class),
-                        @ColumnResult(name = "mobile", type=String.class),
+                        @ColumnResult(name = "email1", type=String.class),
+                        @ColumnResult(name = "email2", type=String.class),
+                        @ColumnResult(name = "mobile1", type=String.class),
+                        @ColumnResult(name = "mobile2", type=String.class),
                         @ColumnResult(name = "designation", type=String.class),
                         @ColumnResult(name = "deal_id", type=Long.class),
                         @ColumnResult(name = "deal_name", type=String.class),
@@ -38,11 +40,17 @@ public class Contact extends Timestamps {
 
     private String name;
 
-    private String email;
+    private String email1;
 
-    private String mobile;
+    private String email2;
+
+    private String mobile1;
+
+    private String mobile2;
 
     private String designation;
+
+    private String Address;
 
     @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn

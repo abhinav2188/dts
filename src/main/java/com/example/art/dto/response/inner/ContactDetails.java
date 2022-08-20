@@ -9,9 +9,13 @@ public class ContactDetails {
 
     private String name;
 
-    private String email;
+    private String email1;
 
-    private String mobile;
+    private String email2;
+
+    private String mobile1;
+
+    private String mobile2;
 
     private String designation;
 

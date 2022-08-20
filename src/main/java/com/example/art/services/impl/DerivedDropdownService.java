@@ -3,10 +3,7 @@ package com.example.art.services.impl;
 import com.example.art.dto.mapper.DropdownMapper;
 import com.example.art.dto.response.inner.DropdownKeyValuesDetails;
 import com.example.art.model.enums.DropdownType;
-import com.example.art.model.views.BrochureDropdownView;
-import com.example.art.model.views.ContactDropdownView;
-import com.example.art.model.views.PartyDropdownView;
-import com.example.art.model.views.UserHandlerDropdownView;
+import com.example.art.model.views.*;
 import com.example.art.repository.*;
 import com.example.art.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
@@ -77,9 +74,13 @@ public class DerivedDropdownService {
             return null;
         }
         List<ContactDropdownView> viewList = contactRepository.findByDeal_Id(dealId);
-        viewList.addAll(consultantRepository.findByDeal_Id(dealId));
+        List<ConsultantDropdownView> viewList1 = consultantRepository.findByDeal_Id(dealId);
 
-        return dropdownMapper.getContactDropdownKeyValuesDetails(dropdownType, viewList);
+        DropdownKeyValuesDetails details = dropdownMapper.getContactDropdownKeyValuesDetails(dropdownType, viewList);
+        DropdownKeyValuesDetails details1 = dropdownMapper.getConsultantDropdownKeyValuesDetails(dropdownType, viewList1);
+        details.getValues().addAll(details1.getValues());
+
+        return details;
     };
 
     private GetDerivedDropdownValue getBrochuresNames = (dropdownType) -> {
@@ -125,8 +126,8 @@ public class DerivedDropdownService {
             log.error("invalid dealId passed");
             return null;
         }
-        List<ContactDropdownView> viewList = consultantRepository.findByDeal_Id(dealId);
-        return dropdownMapper.getContactDropdownKeyValuesDetails(dropdownType, viewList);
+        List<ConsultantDropdownView> viewList = consultantRepository.findByDeal_Id(dealId);
+        return dropdownMapper.getConsultantDropdownKeyValuesDetails(dropdownType, viewList);
     });
 
 

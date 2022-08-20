@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ContactDropdownView {
+public class ConsultantDropdownView {
 
     private Long id;
-    private String email1;
-    private String email2;
+    private String email;
     private String name;
 
 }

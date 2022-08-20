@@ -11,10 +11,14 @@ public class CreateContactRequest {
     private String name;
 
     @NotEmpty
-    private String email;
+    private String email1;
+
+    private String email2;
 
     @NotEmpty
-    private String mobile;
+    private String mobile1;
+
+    private String mobile2;
 
     private String designation;
 

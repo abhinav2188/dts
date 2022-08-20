@@ -1,6 +1,7 @@
 package com.example.art.repository;
 
 import com.example.art.model.Consultant;
+import com.example.art.model.views.ConsultantDropdownView;
 import com.example.art.model.views.ConsultantExcelView;
 import com.example.art.model.views.ContactDropdownView;
 import com.example.art.model.views.ContactExcelView;
@@ -15,7 +16,7 @@ public interface ConsultantRepository extends JpaRepository<Consultant,Long> {
 
     Page<Consultant> findAllByDealId(Long dealId, Pageable pageable);
 
-    List<ContactDropdownView> findByDeal_Id(Long id);
+    List<ConsultantDropdownView> findByDeal_Id(Long id);
 
     @Query(nativeQuery = true)
     List<ConsultantExcelView> findAllConsultantExcelViews_Named();
