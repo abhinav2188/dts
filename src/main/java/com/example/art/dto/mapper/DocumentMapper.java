@@ -21,9 +21,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DocumentMapper {
 
-    @Value("${project.path}")
-    private String projectPath;
-
     @Autowired
     private MapperUtils mapperUtils;
 
