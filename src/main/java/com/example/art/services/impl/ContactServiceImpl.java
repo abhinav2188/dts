@@ -4,18 +4,20 @@ import com.example.art.dto.mapper.ContactMapper;
 import com.example.art.dto.request.CreateContactRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.ContactsResponse;
+import com.example.art.dto.response.ContactsResponse2;
 import com.example.art.dto.response.inner.ContactDetails;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.Contact;
 import com.example.art.model.Deal;
-import com.example.art.model.DealHistory;
 import com.example.art.model.enums.DealSubject;
 import com.example.art.model.enums.UserRole;
+import com.example.art.model.views.ContactExcelView;
 import com.example.art.repository.ContactRepository;
 import com.example.art.repository.DealRepository;
 import com.example.art.services.ContactService;
 import com.example.art.services.DealHistoryService;
+import com.example.art.services.helper.ServiceUtils;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import org.slf4j.MDC;
@@ -26,6 +28,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -41,6 +45,9 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private DealHistoryService dealHistoryService;
+
+    @Autowired
+    private ServiceUtils serviceUtils;
 
     @Override
     public BaseResponse<ContactDetails> addContact(Long dealId, CreateContactRequest request) throws EntityNotFoundException, NoAuthorizationException {
@@ -105,6 +112,23 @@ public class ContactServiceImpl implements ContactService {
         return BaseResponse.builder()
                 .status(HttpStatus.OK)
                 .responseMsg(MessageUtils.successDeleteMessage("Contact"))
+                .build();
+
+    }
+
+    @Override
+    public BaseResponse<ContactsResponse2> getAllContacts(int pageNo, int pageSize) {
+
+        ContactsResponse2 response = new ContactsResponse2();
+        List<ContactExcelView> contactExcelViewList = contactRepository.findAllContactExcelViews_Named();
+        response.setContacts(contactExcelViewList);
+        response.setTotalCount(contactExcelViewList.size());
+        response.setTotalPageCount(1);
+
+        return BaseResponse.<ContactsResponse2>builder()
+                .data(response)
+                .responseMsg("fetched contacts")
+                .status(HttpStatus.OK)
                 .build();
 
     }

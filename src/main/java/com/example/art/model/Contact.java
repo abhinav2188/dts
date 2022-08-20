@@ -11,8 +11,9 @@ import java.util.Date;
 
 @NamedNativeQuery(name = "Contact.findAllContactExcelViews_Named",
         query = "select c.id, c.create_timestamp, c.update_timestamp, c.name, " +
-                "c.email, c.mobile, c.designation, c.deal_id, d.name as deal_name " +
-                "from contact c join deal d on c.deal_id = d.id",
+                "c.email1, c.email2, c.mobile1, c.mobile2, c.designation," +
+                "c.address, c.deal_id, d.name as deal_name " +
+                "from contact c join deal d on c.deal_id = d.id order by c.update_timestamp desc",
         resultSetMapping = "Mapping.ContactExcelView")
 @SqlResultSetMapping(name = "Mapping.ContactExcelView",
         classes = @ConstructorResult(targetClass = ContactExcelView.class,
@@ -26,6 +27,7 @@ import java.util.Date;
                         @ColumnResult(name = "mobile1", type=String.class),
                         @ColumnResult(name = "mobile2", type=String.class),
                         @ColumnResult(name = "designation", type=String.class),
+                        @ColumnResult(name = "address", type=String.class),
                         @ColumnResult(name = "deal_id", type=Long.class),
                         @ColumnResult(name = "deal_name", type=String.class),
                 }))
@@ -50,7 +52,7 @@ public class Contact extends Timestamps {
 
     private String designation;
 
-    private String Address;
+    private String address;
 
     @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn

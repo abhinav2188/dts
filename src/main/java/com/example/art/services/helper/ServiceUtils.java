@@ -9,6 +9,9 @@ import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,6 +25,12 @@ public class ServiceUtils {
         if(roles != null)
             return roles.contains(UserRole.ADMIN.name());
         return false;
+    }
+
+    public void assertUserAdmin() throws NoAuthorizationException {
+        if(!isUserAdmin()){
+            throw new NoAuthorizationException(MessageUtils.noAuthorization("Contact"));
+        }
     }
 
     public Long getCurrentUserId(){
@@ -52,6 +61,13 @@ public class ServiceUtils {
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));
         return deal;
+    }
+
+    public Pageable getPageable(int pageNo, int pageSize, String sortBy, boolean desc){
+        if(desc)
+            return PageRequest.of(pageNo,pageSize, Sort.by(sortBy).descending());
+        else
+            return PageRequest.of(pageNo,pageSize, Sort.by(sortBy).ascending());
     }
 
 }

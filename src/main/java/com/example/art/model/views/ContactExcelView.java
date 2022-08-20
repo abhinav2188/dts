@@ -27,6 +27,8 @@ public class ContactExcelView {
 
     private String designation;
 
+    private String address;
+
     private Long dealId;
 
     private String dealName;
