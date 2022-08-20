@@ -1,6 +1,7 @@
 package com.example.art.dto.response;
 
-import lombok.AllArgsConstructor;
+import com.example.art.dto.response.inner.AttachmentDetails;
+import com.example.art.dto.response.inner.DropdownKeyDetails;
 import lombok.Data;
 
 import java.util.List;
