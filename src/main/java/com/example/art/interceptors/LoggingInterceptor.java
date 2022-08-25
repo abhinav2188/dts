@@ -19,12 +19,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("received requestURL= {}" , request.getRequestURL());
         log.info(request.getAuthType());
-        Enumeration<String> headers = request.getHeaderNames();
-        while (headers.hasMoreElements()){
-            String header = headers.nextElement();
-            String value = request.getHeader(header);
-            log.info("{}={}",header,value);
-        }
+        // Enumeration<String> headers = request.getHeaderNames();
+        // while (headers.hasMoreElements()){
+        //     String header = headers.nextElement();
+        //     String value = request.getHeader(header);
+        //     log.info("{}={}",header,value);
+        // }
         return true;
     }
 
