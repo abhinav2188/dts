@@ -20,11 +20,11 @@ public class LoggingInterceptor implements HandlerInterceptor {
         log.info("received requestURL= {}" , request.getRequestURL());
         log.info(request.getAuthType());
         Enumeration<String> headers = request.getHeaderNames();
-        while (headers.hasMoreElements()){
-            String header = headers.nextElement();
-            String value = request.getHeader(header);
-            log.info("{}={}",header,value);
-        }
+//        while (headers.hasMoreElements()){
+//            String header = headers.nextElement();
+//            String value = request.getHeader(header);
+//            log.info("{}={}",header,value);
+//        }
         return true;
     }
 
