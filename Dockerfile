@@ -21,3 +21,4 @@ EXPOSE 8080
 COPY --from=build /app/target/dts-*.jar /dts.jar
 CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/dts.jar"]
 
+
