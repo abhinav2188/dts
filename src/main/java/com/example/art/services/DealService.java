@@ -1,10 +1,8 @@
 package com.example.art.services;
 
-import com.example.art.dto.CreateDealResponse;
 import com.example.art.dto.request.*;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
-import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
 import com.example.art.dto.response.inner.DealCardDetails;
 import com.example.art.dto.response.inner.DealUserDetails;
@@ -26,7 +24,7 @@ public interface DealService {
 
     BaseResponse<DealDetailResponse> getDealDetails(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException;
 
-    BaseResponse<DealDetailResponse2> getDealDetails2(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException;
+    BaseResponse<DealDetailResponse> getDealDetails2(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException;
 
     BaseResponse<DealUserDetails> addDealOwner(Long dealId, String userEmail) throws EntityNotFoundException, NoAuthorizationException, InvalidOperationException;
 

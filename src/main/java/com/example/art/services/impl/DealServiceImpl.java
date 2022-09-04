@@ -4,7 +4,6 @@ import com.example.art.dto.mapper.DealMapper;
 import com.example.art.dto.request.*;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.DealDetailResponse;
-import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
 import com.example.art.dto.response.inner.DealCardDetails;
 import com.example.art.dto.response.inner.DealUserDetails;
@@ -19,11 +18,11 @@ import com.example.art.repository.PartyRepository;
 import com.example.art.repository.UserRepository;
 import com.example.art.services.DealHistoryService;
 import com.example.art.services.DealService;
+import com.example.art.services.helper.ServiceUtils;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import com.example.art.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.util.StringUtil;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,6 +59,9 @@ public class DealServiceImpl implements DealService {
 
     @Autowired
     private DealHistoryService dealHistoryService;
+
+    @Autowired
+    private ServiceUtils serviceUtils;
 
     @Override
     public BaseResponse<DealCardDetails> createDeal(CreateDealRequest requestDto)
@@ -275,22 +277,19 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public BaseResponse<DealDetailResponse2> getDealDetails2(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException {
+    public BaseResponse<DealDetailResponse> getDealDetails2(Long dealId, Long userId) throws EntityNotFoundException, NoAuthorizationException {
 
-        Deal deal = dealRepository.findById(dealId).orElseThrow(
-                () -> new EntityNotFoundException("Deal","id",dealId));
+        Deal deal = serviceUtils.getDeal(dealId);
+        serviceUtils.checkDealOwnership(deal);
 
-        if(!getCurrentUserId().equals(userId))
-            throw new NoAuthorizationException(MessageUtils.noAuthorization("Deal"));
-        validateUserAuthorization(deal);
+        DealDetailResponse response = dealMapper.getDealDetailResponse(deal, deal.getOwner(), deal.getCoOwners());
 
-        DealDetailResponse2 response = dealMapper.getDealDetailResponse2(deal);
-
-        return BaseResponse.<DealDetailResponse2>builder()
+        return BaseResponse.<DealDetailResponse>builder()
                 .status(HttpStatus.OK)
                 .responseMsg(MessageUtils.successGetMessage("Deal"))
                 .data(response)
                 .build();
+
     }
 
     @Override

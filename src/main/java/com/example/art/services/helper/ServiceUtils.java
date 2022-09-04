@@ -57,6 +57,15 @@ public class ServiceUtils {
                         () -> new NoAuthorizationException(MessageUtils.noAuthorization("Deal")));
     }
 
+    public void checkDealOwnership(Deal deal) throws NoAuthorizationException {
+        Long userId = getCurrentUserId();
+        deal.getCoOwners().stream()
+                .filter(user -> user.getId().equals(userId))
+                .findAny()
+                .orElseThrow(
+                        () -> new NoAuthorizationException(MessageUtils.noAuthorization("Deal")));
+    }
+
     public Deal getDeal(Long dealId) throws EntityNotFoundException {
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));

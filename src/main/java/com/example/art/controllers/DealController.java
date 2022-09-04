@@ -5,6 +5,7 @@ import com.example.art.dto.request.UpdateDealSection3Request;
 import com.example.art.dto.request.UpdateDealSection4Request;
 import com.example.art.dto.request.UpdateProductDetailsRequest;
 import com.example.art.dto.response.BaseResponse;
+import com.example.art.dto.response.DealDetailResponse;
 import com.example.art.dto.response.DealDetailResponse2;
 import com.example.art.dto.response.MultipleDealsResponse;
 import com.example.art.dto.response.inner.DealCardDetails;
@@ -60,8 +61,8 @@ public class DealController {
     }
 
     @GetMapping("/{dealId}")
-    public BaseResponse<DealDetailResponse2> getDealDetails(@PathVariable Long dealId,
-                                                            @RequestParam(name = "userId") Long userId)
+    public BaseResponse<DealDetailResponse> getDealDetails(@PathVariable Long dealId,
+                                                           @RequestParam(name = "userId", required = false) Long userId)
             throws NoAuthorizationException, EntityNotFoundException {
         return dealService.getDealDetails2(dealId,userId);
     }
