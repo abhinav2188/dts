@@ -1,5 +1,6 @@
 package com.example.art.dto.response.inner;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,8 +10,10 @@ public class InteractionDetails {
 
     private Long id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="IST")
     private Date createTimestamp;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone="IST")
     private Date meetingDate;
 
     private String dealStage;

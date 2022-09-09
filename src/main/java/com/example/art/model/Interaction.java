@@ -41,11 +41,12 @@ public class Interaction extends Timestamps {
 
     private String meetingLocation;
 
+    @Column(length = 5000)
     private String meetingDetails;
 
     private String contacts;
 
-    private String interactions;
+    private String consultants;
 
     private String handlers;
 

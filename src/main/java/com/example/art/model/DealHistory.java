@@ -1,7 +1,6 @@
 package com.example.art.model;
 
-import com.example.art.model.abstracts.Timestamps;
-import com.example.art.model.enums.DealSubject;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -17,6 +16,7 @@ public class DealHistory{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="IST")
     private Date createdAt;
 
     private Long userId;
