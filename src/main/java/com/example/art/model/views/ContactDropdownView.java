@@ -11,5 +11,6 @@ public class ContactDropdownView {
     private String email1;
     private String email2;
     private String name;
+    private String mobile1;
 
 }

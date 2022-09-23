@@ -396,8 +396,10 @@ public class DealServiceImpl implements DealService {
         return userId;
     }
 
-    private User validateUserAuthorization(Deal deal) throws NoAuthorizationException {
+    private User validateUserAuthorization(Deal deal) throws NoAuthorizationException, EntityNotFoundException {
         Long userId = Long.parseLong(MDC.get(Constants.USER_ID));
+        if(isUserAdmin()) return userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("User","userId",userId));
         return deal.getCoOwners().stream()
                 .filter(user -> user.getId().equals(userId))
                 .findAny()

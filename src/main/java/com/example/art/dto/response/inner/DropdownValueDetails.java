@@ -16,10 +16,13 @@ public class DropdownValueDetails {
 
     private Integer valueOrder;
 
+    private String label;
+
     public DropdownValueDetails(DropdownValue dropdownValue){
         id = dropdownValue.getId();
         value = dropdownValue.getValue();
         valueOrder = dropdownValue.getValueOrder();
+        label = dropdownValue.getValue();
     }
 
 }

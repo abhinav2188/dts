@@ -27,6 +27,7 @@ public class DropdownMapper {
     private DropdownValueDetails getDropdownValueDetails(PartyDropdownView partyDropdownView) {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(partyDropdownView.getPartyName());
+        details.setLabel(partyDropdownView.getPartyName());
         details.setId(partyDropdownView.getId());
         return details;
     }
@@ -46,6 +47,7 @@ public class DropdownMapper {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(view.getEmail());
         details.setId(view.getId());
+        details.setLabel(view.getEmail());
         return details;
     }
 
@@ -63,6 +65,7 @@ public class DropdownMapper {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(view.getEmail1());
         details.setId(view.getId());
+        details.setLabel(view.getName()+" - "+view.getEmail1()+" - "+view.getMobile1());
         return details;
     }
 
@@ -81,6 +84,7 @@ public class DropdownMapper {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(view.getEmail());
         details.setId(view.getId());
+        details.setLabel(view.getName()+" - "+view.getEmail()+" - "+view.getMobile());
         return details;
     }
 
@@ -99,6 +103,7 @@ public class DropdownMapper {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(brochureDropdownView.getBrochureName());
         details.setId(brochureDropdownView.getId());
+        details.setLabel(brochureDropdownView.getBrochureName());
         return details;
     }
 
@@ -117,6 +122,7 @@ public class DropdownMapper {
         DropdownValueDetails details = new DropdownValueDetails();
         details.setValue(dealDropdownView.getName());
         details.setId(dealDropdownView.getId());
+        details.setLabel(dealDropdownView.getName());
         return details;
     }
 }
