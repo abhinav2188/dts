@@ -81,6 +81,9 @@ public class DealMapper {
         dealCardDetails.setDealName(deal.getName());
         dealCardDetails.setPartyId(deal.getParty().getId());
         dealCardDetails.setPartyName(deal.getParty().getPartyName());
+        List<User> coOwnersList = deal.getCoOwners();
+        String coOwners = String.join(", ",coOwnersList.stream().map( user -> user.getEmail()).collect(Collectors.toList()));
+        dealCardDetails.setDealOwners(coOwners);
         return dealCardDetails;
     }
 

@@ -29,4 +29,6 @@ public class DealCardDetails {
 
     private Boolean isActive;
 
+    private String dealOwners;
+
 }

@@ -1,6 +1,7 @@
 package com.example.art.model;
 
 import com.example.art.model.abstracts.Timestamps;
+import com.example.art.model.views.DealCardView;
 import com.example.art.model.views.DealExcelView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -24,6 +25,30 @@ import java.util.List;
                 columns = {@ColumnResult(name = "id", type=Long.class),
                         @ColumnResult(name = "deal_name", type=String.class),
                         @ColumnResult(name = "party_name", type=String.class),
+                        @ColumnResult(name = "co_owners", type=String.class)
+                }))
+@NamedNativeQuery(name = "Deal.findAllDealCardView_Named",
+        query = "SELECT d.id as deal_id, d.create_timestamp, d.update_timestamp," +
+                " d.name as deal_name , p.party_name as party_name, p.id as party_id," +
+                " d.deal_stage, d.opening_date, d.is_active," +
+                " group_concat(u.email separator ',') as co_owners " +
+                "from (user u join deal_co_owners dco on u.id=dco.co_owners_id) " +
+                "join deal d on d.id = dco.co_owned_deals_id " +
+                "join party p on p.id = d.party_id group by d.name " +
+                "order by d.update_timestamp " +
+                "limit :pageSize ;",
+        resultSetMapping = "Mapping.DealCardView")
+@SqlResultSetMapping(name = "Mapping.DealCardView",
+        classes = @ConstructorResult(targetClass = DealCardView.class,
+                columns = {@ColumnResult(name = "deal_id", type=Long.class),
+                        @ColumnResult(name = "create_timestamp", type=Date.class),
+                        @ColumnResult(name = "update_timestamp", type=Date.class),
+                        @ColumnResult(name = "deal_name", type=String.class),
+                        @ColumnResult(name = "party_name", type=String.class),
+                        @ColumnResult(name = "party_id", type=String.class),
+                        @ColumnResult(name = "deal_stage", type=String.class),
+                        @ColumnResult(name = "opening_date", type=Date.class),
+                        @ColumnResult(name = "is_active", type=Boolean.class),
                         @ColumnResult(name = "co_owners", type=String.class)
                 }))
 @EqualsAndHashCode(callSuper = true)

@@ -1,6 +1,8 @@
 package com.example.art.repository;
 
+import com.example.art.dto.response.inner.DealCardDetails;
 import com.example.art.model.Deal;
+import com.example.art.model.views.DealCardView;
 import com.example.art.model.views.DealDropdownView;
 import com.example.art.model.views.DealExcelView;
 import com.example.art.model.views.DealExcelViewPartial;
@@ -21,6 +23,9 @@ public interface DealRepository extends JpaRepository<Deal,Long> {
 
     @Query(nativeQuery = true)
     List<DealExcelView> findAllDealExcelView_Named();
+
+    @Query(nativeQuery = true)
+    List<DealCardView> findAllDealCardView_Named(int pageSize);
 
     boolean existsByIdAndCoOwners_Id(Long dealId, Long userId);
 
