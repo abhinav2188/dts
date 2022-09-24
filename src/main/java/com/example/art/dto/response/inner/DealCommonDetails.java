@@ -19,6 +19,8 @@ public class DealCommonDetails {
 
     private Date actualCloseDate;
 
+    private Date nfud;
+
     private Integer expectedNumberOfDays;
 
     private String expectedDeliveryAddress;

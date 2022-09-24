@@ -32,10 +32,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -123,6 +120,9 @@ public class DealServiceImpl implements DealService {
     public BaseResponse updateDealSection3(Long dealId, UpdateDealSection3Request requestDto)
             throws EntityNotFoundException, NoAuthorizationException {
 
+
+        requestDto.setExpectedNumberOfDays(calculateDays(requestDto.getOpeningDate(), requestDto.getExpectedCloseDate()));
+
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));
 
@@ -139,6 +139,14 @@ public class DealServiceImpl implements DealService {
                 .responseMsg("Deal Updated")
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    private Integer calculateDays(Date openingDate, Date closeDate) {
+        if(openingDate==null || closeDate==null) return null;
+        Long t1 = openingDate.getTime();
+        Long t2 = closeDate.getTime();
+        if(t1>=t2) return 0;
+        return (int)((t2-t1)/(1000*60*60*24));
     }
 
     @Override

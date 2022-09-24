@@ -101,6 +101,9 @@ public class Deal extends Timestamps {
     @Temporal(TemporalType.DATE)
     private Date actualCloseDate;
 
+    @Temporal(TemporalType.DATE)
+    private Date nfud;
+
     private Integer expectedNumberOfDays;
 
     private String expectedDeliveryAddress;
