@@ -11,6 +11,10 @@ public class DealExcelViewPartial {
 
     private Long id;
 
+    private Date createTimestamp;
+
+    private Date updateTimestamp;
+
     private String productType;
 
     private String subCategoryProduct;
@@ -30,6 +34,8 @@ public class DealExcelViewPartial {
     private String paymentType;
 
     private Date openingDate;
+
+    private Date nfud;
 
     private Date expectedCloseDate;
 

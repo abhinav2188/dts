@@ -16,6 +16,10 @@ public class DealExcelView {
 
     private Long id;
 
+    private Date createTimestamp;
+
+    private Date updateTimestamp;
+
     private String dealName;
 
     private String partyName;
@@ -48,6 +52,8 @@ public class DealExcelView {
     private String paymentType;
 
     private Date openingDate;
+
+    private Date nfud;
 
     private Date expectedCloseDate;
 
