@@ -7,11 +7,11 @@ import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.PartiesDetailResponse;
 import com.example.art.dto.response.PartyResponse;
 import com.example.art.dto.response.inner.PartyDetails;
+import com.example.art.exceptions.DuplicateEntryException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.model.Party;
 import com.example.art.repository.PartyRepository;
 import com.example.art.services.PartyService;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Part;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -35,7 +35,8 @@ public class PartyServiceImpl implements PartyService {
     private PartyMapper partyMapper;
 
     @Override
-    public BaseResponse<PartyResponse> addNewParty(CreatePartyRequest requestDto) {
+    public BaseResponse<PartyResponse> addNewParty(CreatePartyRequest requestDto) throws DuplicateEntryException {
+        validateCreatePartyRequest(requestDto);
         Party party = partyMapper.createParty(requestDto);
         Party savedParty = partyRepository.save(party);
         PartyResponse partyResponse = partyMapper.getPartyResponse(party);
@@ -50,6 +51,16 @@ public class PartyServiceImpl implements PartyService {
                 .status(HttpStatus.BAD_REQUEST)
                 .responseMsg("Party was not added due to some error")
                 .build();
+    }
+
+    private void validateCreatePartyRequest(CreatePartyRequest requestDto) throws DuplicateEntryException {
+        List<String> duplicateFields = new ArrayList<>();
+        if(partyRepository.existsByPartyName(requestDto.getPartyName())){
+            duplicateFields.add("Email");
+        }
+        if(duplicateFields.size() > 0){
+            throw new DuplicateEntryException(duplicateFields);
+        }
     }
 
     @Override

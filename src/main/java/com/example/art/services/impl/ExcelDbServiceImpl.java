@@ -1,10 +1,13 @@
 package com.example.art.services.impl;
 
+import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.model.views.*;
 import com.example.art.repository.*;
 import com.example.art.services.ExcelDbService;
 import com.example.art.services.helper.ExcelHelper;
+import com.example.art.services.helper.ServiceUtils;
 import com.example.art.utils.MapperUtils;
+import com.example.art.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -46,8 +49,14 @@ public class ExcelDbServiceImpl implements ExcelDbService {
     @Autowired
     private MapperUtils mapperUtils;
 
+    @Autowired
+    private ServiceUtils serviceUtils;
+
     @Override
-    public void getDbExcel(HttpServletResponse response) throws IOException {
+    public void getDbExcel(HttpServletResponse response) throws IOException, NoAuthorizationException {
+
+        if(!serviceUtils.isUserAdmin())
+            throw new NoAuthorizationException(MessageUtils.noAuthorization("Excel"));
 
         Workbook workbook = new XSSFWorkbook();
 

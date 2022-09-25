@@ -24,4 +24,6 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     List<PartyExcelView> findByIdNotNull();
 
+    boolean existsByPartyName(String partyName);
+
 }

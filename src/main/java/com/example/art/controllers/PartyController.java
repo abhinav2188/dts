@@ -3,6 +3,7 @@ package com.example.art.controllers;
 import com.example.art.dto.request.CreatePartyRequest;
 import com.example.art.dto.response.BaseResponse;
 import com.example.art.dto.response.PartyResponse;
+import com.example.art.exceptions.DuplicateEntryException;
 import com.example.art.exceptions.EntityNotFoundException;
 import com.example.art.services.PartyService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ public class PartyController {
     private PartyService partyService;
 
     @PostMapping
-    public BaseResponse<PartyResponse> addParty(@RequestBody CreatePartyRequest createPartyRequest){
+    public BaseResponse<PartyResponse> addParty(@RequestBody CreatePartyRequest createPartyRequest) throws DuplicateEntryException {
         return partyService.addNewParty(createPartyRequest);
     }
 

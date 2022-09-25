@@ -1,5 +1,6 @@
 package com.example.art.controllers.internal;
 
+import com.example.art.exceptions.NoAuthorizationException;
 import com.example.art.services.ExcelDbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ public class ExcelDbController {
     private ExcelDbService excelDbService;
 
     @GetMapping
-    public void getDbExcel(HttpServletResponse response) throws IOException {
+    public void getDbExcel(HttpServletResponse response) throws IOException, NoAuthorizationException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
         String currentDateTime = dateFormat.format(new Date());
         response.setContentType("application/octet-stream");

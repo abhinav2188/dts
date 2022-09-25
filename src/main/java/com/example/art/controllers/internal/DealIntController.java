@@ -60,4 +60,13 @@ public class DealIntController {
         return dealService.updateDealAuthorization(dealId, request);
     }
 
+    @GetMapping("/all")
+    public BaseResponse<MultipleDealsResponse> getDeals(@RequestParam(name = "pageNo") int pageNo,
+                                                        @RequestParam(name = "pageSize", required = false, defaultValue = "15") int pageSize,
+                                                        @RequestParam(name="dealName", required = false) String dealName,
+                                                        @RequestParam(name="partyName", required = false) String partyName,
+                                                        @RequestParam(name="coOwnerEmail", required = false) String coOwnerEmail) {
+        return dealService.getMultipleDeals(pageNo,pageSize,dealName,partyName,coOwnerEmail);
+    }
+
 }

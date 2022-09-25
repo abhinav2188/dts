@@ -392,6 +392,30 @@ public class DealServiceImpl implements DealService {
                 .build();
     }
 
+    @Override
+    public BaseResponse<MultipleDealsResponse> getAllUserDeals(int pageNo, int pageSize, String dealName, String partyName, String coOwnerEmail) {
+
+        if(!stringUtils.isNotEmpty(dealName)) dealName="%";
+        if(!stringUtils.isNotEmpty(partyName)) partyName="%";
+        if(!stringUtils.isNotEmpty(coOwnerEmail)) coOwnerEmail="%";
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("updateTimestamp").descending());
+
+        Long userId = getCurrentUserId();
+        Page<Deal> page = dealRepository.findDistinctByCoOwners_IdAndCoOwners_EmailLikeAndParty_PartyNameLikeAndNameLike(
+                userId, coOwnerEmail, partyName, dealName, pageable);
+
+        MultipleDealsResponse response = dealMapper.getMultipleDealsResponse(page);
+
+        String msg = MessageUtils.successMultipleDealResponse(response.getDeals().size());
+
+        return BaseResponse.<MultipleDealsResponse>builder()
+                .status(HttpStatus.OK)
+                .responseMsg(msg)
+                .data(response)
+                .build();
+    }
+
     private boolean isUserAdmin() {
         String roles = MDC.get(Constants.USER_ROLES);
         if(roles != null)

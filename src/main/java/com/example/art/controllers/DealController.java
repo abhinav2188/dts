@@ -57,7 +57,7 @@ public class DealController {
                                                         @RequestParam(name="dealName", required = false) String dealName,
                                                         @RequestParam(name="partyName", required = false) String partyName,
                                                         @RequestParam(name="coOwnerEmail", required = false) String coOwnerEmail) {
-        return dealService.getMultipleDeals(pageNo,pageSize,dealName,partyName,coOwnerEmail);
+        return dealService.getAllUserDeals(pageNo,pageSize,dealName,partyName,coOwnerEmail);
     }
 
     @GetMapping("/{dealId}")
