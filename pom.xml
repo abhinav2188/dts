@@ -13,6 +13,7 @@
 	<groupId>com.art</groupId>
 	<artifactId>dts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<name>dts</name>
 	<description>Deal Tracking System for ART</description>
