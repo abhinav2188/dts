@@ -352,6 +352,7 @@ public class DealServiceImpl implements DealService {
         }
 
         deal.removeUser(user);
+        dealRepository.save(deal);
 
         dealHistoryService.addDealHistory(deal.getId(), DealSubject.UPDATED_DEAL_AUTHORIZATION, "removed "+userEmail +" from deal owners");
 
