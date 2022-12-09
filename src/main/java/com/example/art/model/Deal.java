@@ -162,6 +162,7 @@ public class Deal extends Timestamps {
     private List<Document> attachments;
 
     public void removeUser(User user) {
+//        user.getOwnedDeals().remove(this);
         this.getCoOwners().remove(user);
     }
 
