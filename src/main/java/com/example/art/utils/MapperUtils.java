@@ -28,7 +28,7 @@ public class MapperUtils {
                     count++;
                 field.setAccessible(false);
             }
-            log.info("set fields count = {}",count);
+//            log.info("set fields count = {}",count);
         }catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class MapperUtils {
                 }
                 field.setAccessible(false);
             }
-            log.info("updated fields count = {}",count);
+//            log.info("updated fields count = {}",count);
         }catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -117,7 +117,7 @@ public class MapperUtils {
         }catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        log.info("updated response automatically for {}, {} out of {} fields set.",respClazz.getSimpleName(), count, tcount);
+//        log.info("updated response automatically for {}, {} out of {} fields set.",respClazz.getSimpleName(), count, tcount);
         return count;
     }
 
