@@ -142,7 +142,7 @@ public class Deal extends Timestamps {
     private User owner;
 
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "deals_co_owners")
     private List<User> coOwners;
 

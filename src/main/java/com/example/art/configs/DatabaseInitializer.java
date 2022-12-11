@@ -3,6 +3,8 @@ package com.example.art.configs;
 import com.example.art.model.User;
 import com.example.art.model.enums.UserRole;
 import com.example.art.repository.UserRepository;
+import com.example.art.services.FakeDataService;
+import com.example.art.utils.FakeDataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,11 +26,17 @@ public class DatabaseInitializer implements ApplicationRunner {
     @Value("${MOBILE}")
     private String mobile;
 
+    @Value("${FAKED_DATA}")
+    private boolean initializeFakeData;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FakeDataService fakeDataService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -43,8 +51,10 @@ public class DatabaseInitializer implements ApplicationRunner {
         if(!userRepository.existsByEmail(email))
         userRepository.save(user);
 
-
         addUsers();
+        if(initializeFakeData){
+            fakeDataService.createFakeData(2,5,20);
+        }
     }
 
     private void addUsers() {
@@ -55,7 +65,6 @@ public class DatabaseInitializer implements ApplicationRunner {
         mod1.setPassword(passwordEncoder.encode("mod12345"));
         mod1.setIsActive(true);
         mod1.setMobile("1234387384");
-
 
         User mod2 = new User();
         mod2.setRoles(UserRole.BACKEND_MODERATOR.name());
