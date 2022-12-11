@@ -90,7 +90,7 @@ public class ExcelDbServiceImpl implements ExcelDbService {
     private void updateDealExcelView(List<DealExcelView> viewList, List<DealExcelViewPartial> partials) {
         for(DealExcelView view : viewList){
             Optional<DealExcelViewPartial> partial = partials.stream().filter((p) -> {
-                return view.getId() == p.getId();
+                return view.getId().equals(p.getId());
             }).findAny();
             if(partial.isPresent()){
                 mapperUtils.updateEntity(view, partial.get(), new ArrayList<>());
