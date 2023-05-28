@@ -13,7 +13,7 @@ import java.util.Date;
         query = "select c.id, c.create_timestamp, c.update_timestamp, c.name, " +
                 "c.email1, c.email2, c.mobile1, c.mobile2, c.designation," +
                 "c.address, c.deal_id, d.name as deal_name " +
-                "from contact c join deal d on c.deal_id = d.id order by c.update_timestamp desc",
+                "from contact c join deal d on c.deal_id = d.id order by c.name",
         resultSetMapping = "Mapping.ContactExcelView")
 @SqlResultSetMapping(name = "Mapping.ContactExcelView",
         classes = @ConstructorResult(targetClass = ContactExcelView.class,

@@ -12,7 +12,7 @@ import java.util.Date;
 @NamedNativeQuery(name = "Consultant.findAllConsultantExcelViews_Named",
         query = "select c.id, c.create_timestamp, c.update_timestamp, c.name, " +
                 "c.email, c.mobile, c.designation, c.deal_id, d.name as deal_name " +
-                "from consultant c join deal d on c.deal_id = d.id",
+                "from consultant c join deal d on c.deal_id = d.id order by c.name",
         resultSetMapping = "Mapping.ConsultantExcelView")
 @SqlResultSetMapping(name = "Mapping.ConsultantExcelView",
         classes = @ConstructorResult(targetClass = ConsultantExcelView.class,

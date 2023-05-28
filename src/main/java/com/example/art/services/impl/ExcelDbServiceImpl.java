@@ -63,7 +63,7 @@ public class ExcelDbServiceImpl implements ExcelDbService {
         List<UserExcelView> userExcelViews = userRepository.findByIdNotNull();
         excelHelper.<UserExcelView>listToSheet(workbook,"Users", userExcelViews);
 
-        List<PartyExcelView> partyExcelViews = partyRepository.findByIdNotNull();
+        List<PartyExcelView> partyExcelViews = partyRepository.findByIdNotNullOrderByPartyName();
         excelHelper.<PartyExcelView>listToSheet(workbook,"Party", partyExcelViews);
 
         List<DealExcelView> viewList = dealRepository.findAllDealExcelView_Named();
