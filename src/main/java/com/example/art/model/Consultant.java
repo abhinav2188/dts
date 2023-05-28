@@ -44,7 +44,7 @@ public class Consultant extends Timestamps {
 
     private String designation;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn
     private Deal deal;
 

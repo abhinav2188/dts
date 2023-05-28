@@ -419,7 +419,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public BaseResponse deleteDeal(Long dealId) throws NoAuthorizationException, EntityNotFoundException {
+    public BaseResponse deleteDeal(Long dealId) throws Exception {
 
         Deal deal = dealRepository.findById(dealId).orElseThrow(
                 () -> new EntityNotFoundException("Deal","id",dealId));
@@ -433,7 +433,7 @@ public class DealServiceImpl implements DealService {
             return BaseResponse.builder().status(HttpStatus.OK).responseMsg("success").build();
         }catch(Exception e) {
             log.error("error deleting deal : {}", e.getMessage());
-            return BaseResponse.builder().status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new Exception(e.getMessage());
         }
 
     }

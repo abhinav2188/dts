@@ -156,6 +156,11 @@ public class Deal extends Timestamps {
     private List<Contact> contacts;
 
     @JsonIgnore
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "deal")
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<Consultant> consultants;
+
+    @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "deal")
     @LazyCollection(LazyCollectionOption.TRUE)
     private List<Document> attachments;

@@ -70,7 +70,7 @@ public class DealIntController {
     }
 
     @DeleteMapping("/{dealId}")
-    public BaseResponse deleteDeal(@PathVariable Long dealId) throws NoAuthorizationException, EntityNotFoundException {
+    public BaseResponse deleteDeal(@PathVariable Long dealId) throws Exception {
         return dealService.deleteDeal(dealId);
     }
 
