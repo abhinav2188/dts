@@ -69,4 +69,10 @@ public class DealIntController {
         return dealService.getMultipleDeals(pageNo,pageSize,dealName,partyName,coOwnerEmail);
     }
 
+    @DeleteMapping("/{dealId}")
+    public BaseResponse deleteDeal(@PathVariable Long dealId) throws NoAuthorizationException, EntityNotFoundException {
+        return dealService.deleteDeal(dealId);
+    }
+
+
 }

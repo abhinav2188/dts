@@ -34,4 +34,5 @@ public interface DealService {
 
     BaseResponse<MultipleDealsResponse> getAllUserDeals(int pageNo, int pageSize, String dealName, String partyName, String coOwnerEmail);
 
+    BaseResponse deleteDeal(Long dealId) throws NoAuthorizationException, EntityNotFoundException;
 }

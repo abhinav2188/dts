@@ -22,6 +22,7 @@ import com.example.art.services.helper.ServiceUtils;
 import com.example.art.utils.Constants;
 import com.example.art.utils.MessageUtils;
 import com.example.art.utils.StringUtils;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -415,6 +416,26 @@ public class DealServiceImpl implements DealService {
                 .responseMsg(msg)
                 .data(response)
                 .build();
+    }
+
+    @Override
+    public BaseResponse deleteDeal(Long dealId) throws NoAuthorizationException, EntityNotFoundException {
+
+        Deal deal = dealRepository.findById(dealId).orElseThrow(
+                () -> new EntityNotFoundException("Deal","id",dealId));
+
+        if(!isUserAdmin()){
+            throw new NoAuthorizationException("Deal");
+        }
+
+        try{
+            dealRepository.delete(deal);
+            return BaseResponse.builder().status(HttpStatus.OK).responseMsg("success").build();
+        }catch(Exception e) {
+            log.error("error deleting deal : {}", e.getMessage());
+            return BaseResponse.builder().status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
     private boolean isUserAdmin() {

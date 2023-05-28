@@ -137,22 +137,21 @@ public class Deal extends Timestamps {
     // deal section 5
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn
     private User owner;
 
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "deals_co_owners")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<User> coOwners;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "deal")
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "deal")
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Interaction> interactions;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "deal")
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "deal")
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Contact> contacts;
 
